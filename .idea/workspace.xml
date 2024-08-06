@@ -4,25 +4,70 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="feat: init">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/HttpServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/RequestHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/controllers/UsersController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/BadRequestException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/ForbiddenException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/NotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/ResponseException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/UnauthorizedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/UnprocessableEntityException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionResponseProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/HttpContextHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/OptionsRequestHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/PrimitiveDefaults.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/TokenHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpMethod.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/StatusCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/models/ErrorVM.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/models/ResponseEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/models/UserVM.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/Controller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/FromBody.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/ParamVariable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/PathVariable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/Route.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/RouteDispatcher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/RoutePath.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/security/Autentificated.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/resources/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="AnnotationType" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2kBkxjhQKxvE8gc6Gs9U6wwhsly" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -31,11 +76,39 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.Main.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true"
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Projects/java/otus-basic-final/otus-basic-final/web/src/main/resources"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Projects\java\otus-basic-final\otus-basic-final\web\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ru.otus.web.Main" />
+      <module name="web" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.otus.web.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -45,6 +118,27 @@
       <option name="presentableId" value="Default" />
       <updated>1722764605314</updated>
     </task>
+    <task id="LOCAL-00001" summary="feat: init">
+      <option name="closed" value="true" />
+      <created>1722766273882</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1722766273882</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: init" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: init" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="(method.getGenericReturnType() " />
+        <watch expression="method.getReturnType()" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
