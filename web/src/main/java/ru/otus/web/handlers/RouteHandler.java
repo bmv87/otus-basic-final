@@ -4,15 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.web.exceptions.BadRequestException;
-import ru.otus.web.exceptions.ResponseException;
+import ru.otus.services.exceptions.BadRequestException;
+import ru.otus.services.exceptions.ResponseException;
 import ru.otus.web.http.HttpContext;
+import ru.otus.web.http.HttpResponse;
 import ru.otus.web.http.StatusCode;
 import ru.otus.web.models.ResponseEntity;
 import ru.otus.web.routing.FromBody;
 import ru.otus.web.routing.ParamVariable;
 import ru.otus.web.routing.PathVariable;
 import ru.otus.web.routing.Route;
+import ru.otus.web.security.Principal;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -37,61 +39,28 @@ public class RouteHandler implements HttpContextHandler {
         logger.debug("RouteHandler execute");
         logger.debug(route.toString());
         try {
-            var inst = method.getDeclaringClass().getConstructor().newInstance();
+
             List<Object> params = new ArrayList<>();
             for (Parameter p : method.getParameters()) {
-                var pathAnnotation = p.getAnnotation(PathVariable.class);
-                if (pathAnnotation != null) {
-                    var varIndex = route.getIndexOfPathVariable(pathAnnotation.name());
-                    if (varIndex == -1) {
-                        throw new BadRequestException("PathVariable not found");
-                    }
-                    var param = context.getRequest().getPath().split("/")[varIndex];
-                    params.add(p.getType().cast(param));
+
+                if (tryAddPrincipal(params, p, context)) {
                     continue;
                 }
-                var paramAnnotation = p.getAnnotation(ParamVariable.class);
-                if (paramAnnotation != null) {
-                    var param = context.getRequest().getParameters().get(paramAnnotation.name());
-                    if (param == null) {
-                        params.add(PrimitiveDefaults.getDefaultValue(p.getType()));
-                        continue;
-                    }
-                    params.add(p.getType().cast(param));
+                if (tryAddPathVariable(params, p, context)) {
+                    continue;
                 }
-
-                var fromBodyAnnotation = p.getAnnotation(FromBody.class);
-                if (fromBodyAnnotation != null) {
-                    var body = context.getRequest().getBody();
-                    if (body == null || body.isBlank()) {
-                        throw new BadRequestException("Для данного маршрута тело запроса не может быть пустым.");
-                    }
-                    try {
-                        Gson gson = new Gson();
-                        params.add(gson.fromJson(body, p.getType()));
-                    } catch (JsonParseException e) {
-                        throw new BadRequestException("Некорректный формат входящего JSON объекта");
-                    }
+                if (tryAddParamVariable(params, p, context)) {
+                    continue;
+                }
+                if (tryAddFromBody(params, p, context)) {
+                    continue;
                 }
             }
             var response = context.getResponse();
             if (params.isEmpty()) {
-                if (method.getReturnType().equals(Void.TYPE)) {
-                    method.invoke(inst);
-                    response.setResponseCode(StatusCode.OK);
-                } else if (method.getGenericReturnType() instanceof ResponseEntity<?>) {
-                    response.setResponse((ResponseEntity<?>) method.getReturnType().cast(method.invoke(inst)));
-                } else {
-                    response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst)), StatusCode.OK));
-                }
+                tryInvoke(method, response);
             } else {
-                if (method.getReturnType().equals(Void.TYPE)) {
-                    method.invoke(inst, params.toArray());
-                } else if (method.getGenericReturnType() instanceof ResponseEntity<?>) {
-                    response.setResponse((ResponseEntity<?>) method.getReturnType().cast(method.invoke(inst, params.toArray())));
-                } else {
-                    response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst, params.toArray())), StatusCode.OK));
-                }
+                tryInvokeWithParams(method, params, response);
             }
             response.send();
         } catch (InstantiationException | IllegalAccessException |
@@ -104,5 +73,95 @@ public class RouteHandler implements HttpContextHandler {
                 throw new ResponseException(String.format("Ошибка выполнения метода %s класса %s", method.getName(), method.getDeclaringClass().getSimpleName()), e);
             }
         }
+    }
+
+    private void tryInvoke(Method method, HttpResponse response) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+        var inst = method.getDeclaringClass().getConstructor().newInstance();
+        if (method.getReturnType().equals(Void.TYPE)) {
+            method.invoke(inst);
+            response.setResponseCode(StatusCode.OK);
+        } else {
+            response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst)), StatusCode.OK));
+        }
+        if (inst instanceof AutoCloseable closable) {
+            try {
+                closable.close();
+            } catch (Exception e) {
+                logger.error("Ошибка при закрытии ресурса.", e);
+            }
+        }
+    }
+
+    private void tryInvokeWithParams(Method method, List<Object> params, HttpResponse response) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+        var inst = method.getDeclaringClass().getConstructor().newInstance();
+        if (method.getReturnType().equals(Void.TYPE)) {
+            method.invoke(inst, params.toArray());
+            response.setResponseCode(StatusCode.OK);
+        } else {
+            response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst, params.toArray())), StatusCode.OK));
+        }
+        if (inst instanceof AutoCloseable closable) {
+            try {
+                closable.close();
+            } catch (Exception e) {
+                logger.error("Ошибка при закрытии ресурса.", e);
+            }
+        }
+    }
+
+    private boolean tryAddPathVariable(List<Object> distinationList, Parameter p, HttpContext context) {
+        var pathAnnotation = p.getAnnotation(PathVariable.class);
+        if (pathAnnotation == null) {
+            return false;
+        }
+        var varIndex = route.getIndexOfPathVariable(pathAnnotation.name());
+        if (varIndex == -1) {
+            throw new BadRequestException("PathVariable not found");
+        }
+        var param = context.getRequest().getPath().split("/")[varIndex];
+        distinationList.add(TypesHelper.getTypedValue(p.getType(), param));
+        return true;
+    }
+
+    private boolean tryAddParamVariable(List<Object> distinationList, Parameter p, HttpContext context) {
+        var paramAnnotation = p.getAnnotation(ParamVariable.class);
+        if (paramAnnotation == null) {
+            return false;
+        }
+        var param = context.getRequest().getParameters().get(paramAnnotation.name());
+        if (param == null) {
+            distinationList.add(TypesHelper.getDefaultValue(p.getType()));
+            return true;
+        }
+        distinationList.add(TypesHelper.getTypedValue(p.getType(), param));
+        return true;
+    }
+
+    private boolean tryAddPrincipal(List<Object> distinationList, Parameter p, HttpContext context) {
+        var principalAnnotation = p.getAnnotation(Principal.class);
+        if (principalAnnotation == null) {
+            return false;
+        }
+        var param = context.getPrincipal();
+        distinationList.add(param);
+        return true;
+    }
+
+    private boolean tryAddFromBody(List<Object> distinationList, Parameter p, HttpContext context) {
+        var fromBodyAnnotation = p.getAnnotation(FromBody.class);
+        if (fromBodyAnnotation == null) {
+            return false;
+        }
+        var body = context.getRequest().getBody();
+        if (body == null || body.isBlank()) {
+            throw new BadRequestException("Для данного маршрута тело запроса не может быть пустым.");
+        }
+        try {
+            Gson gson = GsonConfigurator.getDefault();
+            distinationList.add(gson.fromJson(body, p.getType()));
+        } catch (JsonParseException e) {
+            throw new BadRequestException("Некорректный формат входящего JSON объекта");
+        }
+        return true;
     }
 }

@@ -2,7 +2,7 @@ package ru.otus.web.handlers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.web.exceptions.ResponseException;
+import ru.otus.services.exceptions.ResponseException;
 import ru.otus.web.http.HttpContext;
 
 import java.io.IOException;

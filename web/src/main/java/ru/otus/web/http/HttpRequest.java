@@ -82,7 +82,7 @@ public class HttpRequest {
                 this.parameters.put(keyValue[0], keyValue[1]);
             }
         }
-        if (method == HttpMethod.POST) {
+        if (method == HttpMethod.POST || method == HttpMethod.PUT) {
             this.body = rawRequest.substring(
                     rawRequest.indexOf("\r\n\r\n") + 4
             );

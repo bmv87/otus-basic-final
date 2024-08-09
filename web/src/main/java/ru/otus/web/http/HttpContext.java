@@ -2,6 +2,7 @@ package ru.otus.web.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.otus.services.models.user.UserVM;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -10,6 +11,7 @@ public class HttpContext implements AutoCloseable {
     private Socket connection;
     private HttpRequest request;
     private HttpResponse response;
+    private UserVM principal;
     private static final Logger logger = LoggerFactory.getLogger(HttpContext.class);
 
     public HttpContext(Socket connection) {
@@ -29,6 +31,14 @@ public class HttpContext implements AutoCloseable {
 
     public HttpResponse getResponse() {
         return response;
+    }
+
+    public UserVM getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(UserVM principal) {
+        this.principal = principal;
     }
 
     @Override

@@ -3,6 +3,8 @@ package ru.otus.web.http;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.otus.services.exceptions.ResponseException;
+import ru.otus.web.handlers.GsonConfigurator;
 import ru.otus.web.models.ResponseEntity;
 
 import java.io.IOException;
@@ -52,8 +54,12 @@ public class HttpResponse {
         }
         responseCode = response.getStatusCode();
         if (response.getBody() != null) {
-            Gson gson = new Gson();
-            body = gson.toJson(response.getBody());
+            Gson gson = GsonConfigurator.getDefault();
+            try {
+                body = gson.toJson(response.getBody());
+            } catch (Exception e) {
+                throw new ResponseException("Ошибка добавления тела ответа.", e);
+            }
         }
     }
 
