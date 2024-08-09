@@ -1,7 +1,8 @@
-package ru.otus.web.exceptions;
+package ru.otus.services.exceptions;
 
-import ru.otus.web.http.StatusCode;
-import ru.otus.web.models.ErrorVM;
+import ru.otus.services.http.StatusCode;
+import ru.otus.services.models.ErrorVM;
+
 
 public class ResponseException extends RuntimeException {
     protected StatusCode code;

@@ -1,6 +1,6 @@
-package ru.otus.web.models;
+package ru.otus.services.models;
 
-import ru.otus.web.http.StatusCode;
+import ru.otus.services.http.StatusCode;
 
 public class ErrorVM {
     private final int code;
