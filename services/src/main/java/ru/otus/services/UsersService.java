@@ -37,7 +37,7 @@ public class UsersService implements AutoCloseable {
             Cachable currentUser = new UserVM(user.getUserId(), user.getLogin(), user.getUsername(), user.getRole().getName(), user.getLocked());
 
             cacheManager.addToCache(CacheNames.AUTH, token, currentUser);
-            return new LoginResponseVM(user.getUsername(), token);
+            return new LoginResponseVM(user.getUsername(), token, user.getRole().getName());
         } catch (GeneralSecurityException | UnsupportedEncodingException e) {
             throw new ResponseException("Ошибка во время генерации токена.", e);
         }
