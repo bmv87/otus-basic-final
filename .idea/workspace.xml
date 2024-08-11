@@ -4,67 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="feat: init">
-      <change afterPath="$PROJECT_DIR$/repository/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/Seed.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/UsersRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Grade.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/GradeEnum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Note.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/RoleEnum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Subscription.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/SubscriptionId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/resources/db/initial_data.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/resources/log4j2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/EncryptionUtility.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/NotesService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/UsersService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/cache/Cachable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/cache/Cache.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/cache/CacheManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/cache/CacheNames.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/http/StatusCode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/grade/GradeCreateVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/grade/GradeInfoVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/note/NoteCreateVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/note/NoteInfoVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/subscription/SubscriptionInfoVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/subscription/SubscriptionVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/LockStatusVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/LoginRequestVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/LoginResponseVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/UserCreateVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/UserShortVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/UserVM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/controllers/NotesController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/GsonConfigurator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/security/Principal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/web/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/HttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/HttpServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/UsersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/UsersService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/LoginResponseVM.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/LoginResponseVM.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/controllers/UsersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/controllers/UsersController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/BadRequestException.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/exceptions/BadRequestException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/ForbiddenException.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/exceptions/ForbiddenException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/NotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/exceptions/NotFoundException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/ResponseException.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/exceptions/ResponseException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/UnauthorizedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/exceptions/UnauthorizedException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/exceptions/UnprocessableEntityException.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/exceptions/UnprocessableEntityException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionResponseProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionResponseProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/PrimitiveDefaults.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/TypesHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/OptionsRequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/OptionsRequestHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/TokenHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/TokenHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/models/ErrorVM.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/ErrorVM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/models/UserVM.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/Route.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/Route.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/RouteDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/RouteDispatcher.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -94,18 +44,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.Seed.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_directory_selection&quot;: &quot;C:/Projects/java/otus-basic-final/otus-basic-final/services/src/main/java/ru/otus/services/models&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Projects/java/otus-basic-final/otus-basic-final/repository/src/main/resources&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Debug",
+    "Application.Seed.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "C:/Projects/java/otus-basic-final/otus-basic-final/services/src/main/java/ru/otus/services/models",
+    "last_opened_file_path": "C:/Projects/java/otus-basic-final/otus-basic-final/repository/src/main/resources",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="ru.otus.web.models" />
@@ -179,20 +132,38 @@
       <option name="project" value="LOCAL" />
       <updated>1722766273882</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat: repository &amp; services modules">
+      <option name="closed" value="true" />
+      <created>1723206456970</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1723206456970</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat: web module refactoring + controllers methods">
+      <option name="closed" value="true" />
+      <created>1723206524607</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1723206524607</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: repository &amp; services modules" />
     <MESSAGE value="feat: init" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: init" />
+    <MESSAGE value="feat: web module refactoring + controllers methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: web module refactoring + controllers methods" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/UsersRepository.java</url>
-          <line>55</line>
-          <option name="timeStamp" value="4" />
+          <url>file://$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/OptionsRequestHandler.java</url>
+          <line>18</line>
+          <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -200,6 +171,8 @@
       <configuration name="Application">
         <watch expression="(method.getGenericReturnType() " />
         <watch expression="method.getReturnType()" />
+        <watch expression="routes.keySet().stream().sorted()" />
+        <watch expression="routes.keySet().stream().sorted().toList()" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>

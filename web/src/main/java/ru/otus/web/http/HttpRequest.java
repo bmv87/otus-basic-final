@@ -94,7 +94,7 @@ public class HttpRequest {
         var rawHeaders = rawRequest.substring(startHeadersIndex, endHeadersIndex).split("\r\n");
         for (String header : rawHeaders) {
             var keyValue = header.split(": ", 2);
-            headers.put(keyValue[0], keyValue[1]);
+            headers.put(keyValue[0].toLowerCase(), keyValue[1]);
         }
         logInfo();
     }

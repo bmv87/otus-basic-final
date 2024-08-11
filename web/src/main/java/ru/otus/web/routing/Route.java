@@ -63,7 +63,7 @@ public class Route implements Comparable<Route> {
 
     @Override
     public int compareTo(Route o) {
-        return o.pathString.compareTo(this.pathString);
+        return this.pathString.compareTo(o.pathString);
     }
 
     public boolean isSameRoute(HttpMethod currentMethod, String fullPathString) {
@@ -71,7 +71,8 @@ public class Route implements Comparable<Route> {
         if (currentMethod != method) {
             return false;
         }
-        if (currentMethod == HttpMethod.OPTIONS) {
+        var currentPath = parsePathString(fullPathString);
+        if (currentPath.equalsIgnoreCase(pathString)) {
             return true;
         }
         var currentPaths = parsePaths(parsePathString(fullPathString));

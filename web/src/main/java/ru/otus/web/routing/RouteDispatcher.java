@@ -51,10 +51,14 @@ public class RouteDispatcher {
         var groupedRoutes = routes.keySet().stream().collect(Collectors.groupingBy(Route::getPathString));
         for (var g : groupedRoutes.entrySet()) {
             var route = new Route(HttpMethod.OPTIONS, g.getKey());
-            Map<String, String> headers = new HashMap<>();
-            headers.put(Constants.Headers.ALLOW, g.getValue().stream().map(v -> v.getMethod().name()).collect(Collectors.joining(",")));
-            optionsRoutes.put(route, new ExceptionHandler(new OptionsRequestHandler(headers)));
             logger.debug(route.toString());
+            Map<String, String> headers = new HashMap<>();
+            var allowed = HttpMethod.OPTIONS + "," + g.getValue().stream().map(v -> v.getMethod().name()).collect(Collectors.joining(","));
+            logger.debug("Allowed methods: {}", allowed);
+//            headers.put(Constants.Headers.ALLOW, allowed);
+            headers.put(Constants.Headers.ACCESS_CONTROL_ALLOW_METHODS, allowed);
+            optionsRoutes.put(route, new ExceptionHandler(new OptionsRequestHandler(headers)));
+
         }
         routes.putAll(optionsRoutes);
     }

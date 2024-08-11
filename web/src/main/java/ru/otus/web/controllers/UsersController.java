@@ -63,7 +63,7 @@ public class UsersController implements AutoCloseable {
         usersService.addSubscription(user, model);
     }
 
-    @RoutePath(method = HttpMethod.DELETE, path = "users/{id}/subscriptions")
+    @RoutePath(method = HttpMethod.DELETE, path = "subscriptions/{id}")
     @Autentificated
     public void addSubscription(@Principal UserVM user, @PathVariable(name = "id") UUID id) {
         usersService.deleteSubscription(user, id);

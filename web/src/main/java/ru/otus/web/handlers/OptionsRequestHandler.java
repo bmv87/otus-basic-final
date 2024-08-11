@@ -13,11 +13,15 @@ import java.util.Map;
 public class OptionsRequestHandler implements HttpContextHandler {
     private Map<String, String> headers = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(OptionsRequestHandler.class);
+    private final String ANY_VALUE = "*";
 
     public OptionsRequestHandler(Map<String, String> headers) {
-        this.headers.put(Constants.Headers.ACCEPT, Constants.MimeTypes.JSON);
+//        this.headers.put(Constants.Headers.ACCEPT, Constants.MimeTypes.JSON);
+        this.headers.put(Constants.Headers.CONTENT_LENGTH, "0");
+        this.headers.put(Constants.Headers.CONNECTION, "keep-alive");
+
         for (var header : headers.entrySet()) {
-            if (!headers.containsKey(header.getKey())) {
+            if (!this.headers.containsKey(header.getKey())) {
                 this.headers.put(header.getKey(), header.getValue());
             }
         }
@@ -28,10 +32,9 @@ public class OptionsRequestHandler implements HttpContextHandler {
         logger.debug("OptionsRequestHandler execute");
 
         var response = context.getResponse();
-        for (var header : headers.entrySet()) {
+        for (var header : this.headers.entrySet()) {
             response.addHeader(header.getKey(), header.getValue());
         }
-
         response.setResponseCode(StatusCode.OK);
         response.send();
     }

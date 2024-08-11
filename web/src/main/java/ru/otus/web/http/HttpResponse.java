@@ -25,6 +25,10 @@ public class HttpResponse {
     public HttpResponse(OutputStream out) {
         this.out = out;
         this.headers.put(Constants.Headers.CONTENT_TYPE, Constants.MimeTypes.JSON);
+        this.headers.put(Constants.Headers.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+        this.headers.put(Constants.Headers.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+        this.headers.put(Constants.Headers.ACCESS_CONTROL_ALLOW_HEADERS, Constants.Headers.CONTENT_TYPE + ", " + Constants.Headers.TOKEN);
+        this.headers.put(Constants.Headers.ACCESS_CONTROL_REQUEST_HEADERS, Constants.Headers.CONTENT_TYPE + ", " + Constants.Headers.TOKEN);
         this.setResponseCode(StatusCode.OK);
     }
 
@@ -77,6 +81,7 @@ public class HttpResponse {
         }
         sb.append("\r\n");
         if (body != null && !body.isEmpty()) {
+
             sb.append(body);
         }
         var responseStr = sb.toString();

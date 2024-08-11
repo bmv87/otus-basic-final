@@ -25,7 +25,7 @@ public class TokenHandler implements HttpContextHandler {
     @Override
     public void execute(HttpContext context) throws IOException {
         logger.debug("TokenHandler execute");
-        var token = context.getRequest().getHeaders().get(Constants.Headers.TOKEN);
+        var token = context.getRequest().getHeaders().get(Constants.Headers.TOKEN.toLowerCase());
         if (token == null) {
             throw new UnauthorizedException("Пользователь не аутентифицирован");
         }
