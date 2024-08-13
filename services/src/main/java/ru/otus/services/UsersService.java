@@ -1,6 +1,7 @@
 package ru.otus.services;
 
 import ru.otus.repository.UsersRepository;
+import ru.otus.repository.entities.GenderEnum;
 import ru.otus.repository.entities.RoleEnum;
 import ru.otus.repository.entities.Subscription;
 import ru.otus.repository.entities.User;
@@ -8,6 +9,7 @@ import ru.otus.services.cache.Cachable;
 import ru.otus.services.cache.CacheManager;
 import ru.otus.services.cache.CacheNames;
 import ru.otus.services.exceptions.*;
+import ru.otus.services.models.Pagination;
 import ru.otus.services.models.subscription.SubscriptionInfoVM;
 import ru.otus.services.models.subscription.SubscriptionVM;
 import ru.otus.services.models.user.*;
@@ -27,6 +29,17 @@ public class UsersService implements AutoCloseable {
         cacheManager = CacheManager.getInstance();
     }
 
+    private UserVM mapUserToVM(User user) {
+        return new UserVM(
+                user.getUserId(),
+                user.getLogin(),
+                user.getUsername(),
+                user.getRole().getName(),
+                user.getAge(),
+                user.getGender(),
+                user.getLocked());
+    }
+
     public LoginResponseVM login(LoginRequestVM model) {
         var user = usersRepository.getUserByLogin(model.getLogin());
         if (user == null || !user.getPassword().equals(model.getPassword())) {
@@ -34,13 +47,26 @@ public class UsersService implements AutoCloseable {
         }
         try {
             var token = EncryptionUtility.encrypt(user.getLogin() + user.getPassword());
-            Cachable currentUser = new UserVM(user.getUserId(), user.getLogin(), user.getUsername(), user.getRole().getName(), user.getLocked());
+            Cachable currentUser = mapUserToVM(user);
 
             cacheManager.addToCache(CacheNames.AUTH, token, currentUser);
             return new LoginResponseVM(user.getUsername(), token, user.getRole().getName());
         } catch (GeneralSecurityException | UnsupportedEncodingException e) {
             throw new ResponseException("Ошибка во время генерации токена.", e);
         }
+    }
+
+    public void editUser(UserVM currentUser, UserEditVM model) {
+        if (model == null || model.getUsername() == null || model.getUsername().isBlank()) {
+            throw new UnprocessableEntityException("Имя пользователя не задано");
+        }
+        usersRepository.beginTransaction();
+        var user = usersRepository.getUserById(currentUser.getUserId());
+        user.setAge(model.getAge());
+        user.setGender(model.getGender());
+        user.setUsername(model.getUsername());
+        usersRepository.updateUser(user);
+        usersRepository.saveContext();
     }
 
     public UUID registration(UserCreateVM model) {
@@ -60,33 +86,59 @@ public class UsersService implements AutoCloseable {
         return newUser.getUserId();
     }
 
-    public List<UserShortVM> getUsers(UserVM currentUser) {
+    public Pagination<UserShortVM> getUsers(
+            UserVM currentUser,
+            String username,
+            String gender,
+            Integer age,
+            Integer page,
+            Integer limit) {
         if (currentUser == null) {
             throw new ForbiddenException("Доступ запрещен.");
         }
-
+        GenderEnum genderValue = null;
+        if (gender != null && !gender.isBlank()) {
+            try {
+                genderValue = GenderEnum.valueOf(gender.toUpperCase());
+            } catch (Exception e) {
+                throw new UnprocessableEntityException("Недопустимое значение поля gender " + gender);
+            }
+        }
         var subscriptions = usersRepository.getUserSubscriptions(currentUser.getUserId());
-        var users = usersRepository.getUsers(currentUser.getRole() != RoleEnum.ADMIN);
+        var users = usersRepository.getUsers(
+                currentUser.getRole() != RoleEnum.ADMIN,
+                currentUser.getUserId(),
+                username,
+                genderValue,
+                age,
+                page,
+                limit);
 
-        return users.stream().map(u ->
+        var usersList = users.getItems().stream().map(u ->
                         new UserShortVM(
                                 u.getUserId(),
                                 u.getUsername(),
                                 u.getLocked(),
                                 subscriptions.stream().anyMatch(s -> s.getSubscriberId().equals(currentUser.getUserId()) && s.getBlogOwnerId().equals(u.getUserId()))))
                 .toList();
+        return new Pagination<>(users.getTotalCount(), usersList);
     }
 
     public UserVM getUserById(UserVM currentUser, UUID userId) {
         if (userId == null) {
             throw new UnprocessableEntityException("Идентификатор пользователя не указан.");
         }
-        if (currentUser == null || (currentUser.getRole() != RoleEnum.ADMIN && !currentUser.getUserId().equals(userId))) {
+        if (currentUser == null) {
             throw new ForbiddenException("Доступ запрещен.");
         }
-
+        if (!currentUser.getUserId().equals(userId)) {
+            var subscriptions = usersRepository.getUserSubscriptions(currentUser.getUserId());
+            if (subscriptions.stream().noneMatch(s -> s.getSubscriberId().equals(currentUser.getUserId()) && s.getBlogOwnerId().equals(userId))) {
+                throw new ForbiddenException("Вы не подписаны на этого пользователя");
+            }
+        }
         var user = usersRepository.getUserById(userId);
-        return new UserVM(user.getUserId(), user.getLogin(), user.getUsername(), user.getRole().getName(), user.getLocked());
+        return mapUserToVM(user);
     }
 
     public void changeLockStatus(UserVM currentUser, UUID userId, LockStatusVM model) {
@@ -123,13 +175,13 @@ public class UsersService implements AutoCloseable {
         if (model.getUserId() == null) {
             throw new UnprocessableEntityException("Идентификатор пользователя не указан.");
         }
-
+        usersRepository.beginTransaction();
         var user = usersRepository.getUserById(model.getUserId());
         if (user == null) {
             throw new NotFoundException("Пользователь не найден");
         }
         var subscription = usersRepository.getSubscriptionById(currentUser.getUserId(), model.getUserId());
-        if (subscription == null) {
+        if (subscription != null) {
             throw new UnprocessableEntityException(String.format("Вы уже подписаны на пользователя %s.", user.getUsername()));
         }
         subscription = new Subscription(currentUser.getUserId(), model.getUserId(), LocalDateTime.now());
@@ -159,8 +211,7 @@ public class UsersService implements AutoCloseable {
     }
 
     public List<SubscriptionInfoVM> getSubscriptions(UserVM currentUser, UUID subscriberId) {
-        if (currentUser == null ||
-                (currentUser.getRole() != RoleEnum.ADMIN && !currentUser.getUserId().equals(subscriberId))) {
+        if (currentUser == null) {
             throw new ForbiddenException("Доступ запрещен.");
         }
         if (subscriberId == null) {
@@ -170,6 +221,12 @@ public class UsersService implements AutoCloseable {
         var user = usersRepository.getUserById(subscriberId);
         if (user == null) {
             throw new NotFoundException("Пользователь не найден");
+        }
+        if (!currentUser.getUserId().equals(subscriberId)) {
+            var subscriptions = usersRepository.getUserSubscriptions(currentUser.getUserId());
+            if (subscriptions.stream().noneMatch(s -> s.getSubscriberId().equals(currentUser.getUserId()) && s.getBlogOwnerId().equals(subscriberId))) {
+                throw new ForbiddenException("Вы не подписаны на этого пользователя");
+            }
         }
         var subscriptions = usersRepository.getUserSubscriptions(subscriberId);
         return subscriptions.stream().map(s -> new SubscriptionInfoVM(s.getBlogOwnerId(), s.getBlogOwner().getUsername())).toList();

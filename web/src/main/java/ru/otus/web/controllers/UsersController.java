@@ -1,14 +1,12 @@
 package ru.otus.web.controllers;
 
 import ru.otus.services.UsersService;
+import ru.otus.services.models.Pagination;
 import ru.otus.services.models.subscription.SubscriptionInfoVM;
 import ru.otus.services.models.subscription.SubscriptionVM;
 import ru.otus.services.models.user.*;
 import ru.otus.web.http.HttpMethod;
-import ru.otus.web.routing.Controller;
-import ru.otus.web.routing.FromBody;
-import ru.otus.web.routing.PathVariable;
-import ru.otus.web.routing.RoutePath;
+import ru.otus.web.routing.*;
 import ru.otus.web.security.Autentificated;
 import ru.otus.web.security.Principal;
 
@@ -41,14 +39,32 @@ public class UsersController implements AutoCloseable {
 
     @RoutePath(method = HttpMethod.GET, path = "users")
     @Autentificated
-    public List<UserShortVM> getUsers(@Principal UserVM user /*, @ParamVariable(name = "name") String name*/) {
-        return usersService.getUsers(user);
+    public Pagination<UserShortVM> getUsers(
+            @Principal UserVM user,
+            @ParamVariable(name = "username") String username,
+            @ParamVariable(name = "gender") String gender,
+            @ParamVariable(name = "age") Integer age,
+            @ParamVariable(name = "page") Integer page,
+            @ParamVariable(name = "limit") Integer limit
+    ) {
+        return usersService.getUsers(user,
+                username,
+                gender,
+                age,
+                page,
+                limit);
     }
 
     @RoutePath(method = HttpMethod.GET, path = "users/{id}")
     @Autentificated
     public UserVM getUserById(@Principal UserVM user, @PathVariable(name = "id") UUID id) {
         return usersService.getUserById(user, id);
+    }
+
+    @RoutePath(method = HttpMethod.PUT, path = "users/current")
+    @Autentificated
+    public void editUser(@Principal UserVM user, @FromBody UserEditVM model) {
+        usersService.editUser(user, model);
     }
 
     @RoutePath(method = HttpMethod.GET, path = "users/{id}/subscriptions")
@@ -65,13 +81,13 @@ public class UsersController implements AutoCloseable {
 
     @RoutePath(method = HttpMethod.DELETE, path = "subscriptions/{id}")
     @Autentificated
-    public void addSubscription(@Principal UserVM user, @PathVariable(name = "id") UUID id) {
+    public void deleteSubscription(@Principal UserVM user, @PathVariable(name = "id") UUID id) {
         usersService.deleteSubscription(user, id);
     }
 
     @RoutePath(method = HttpMethod.PUT, path = "users/{id}/status")
     @Autentificated
-    public void getUserById(@Principal UserVM user, @PathVariable(name = "id") UUID id, @FromBody LockStatusVM model) {
+    public void changeLockStatus(@Principal UserVM user, @PathVariable(name = "id") UUID id, @FromBody LockStatusVM model) {
         usersService.changeLockStatus(user, id, model);
     }
 

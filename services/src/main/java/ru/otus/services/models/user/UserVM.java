@@ -1,5 +1,6 @@
 package ru.otus.services.models.user;
 
+import ru.otus.repository.entities.GenderEnum;
 import ru.otus.repository.entities.RoleEnum;
 import ru.otus.services.cache.Cachable;
 
@@ -10,7 +11,22 @@ public class UserVM implements Cachable {
     private String login;
     private String username;
     private RoleEnum role;
+    private Integer age;
+    private GenderEnum gender;
     private Boolean locked;
+
+    public UserVM() {
+    }
+
+    public UserVM(UUID userId, String login, String username, RoleEnum role, Integer age, GenderEnum gender, Boolean locked) {
+        this.userId = userId;
+        this.login = login;
+        this.username = username;
+        this.role = role;
+        this.age = age;
+        this.gender = gender;
+        this.locked = locked;
+    }
 
     public UUID getUserId() {
         return userId;
@@ -52,13 +68,22 @@ public class UserVM implements Cachable {
         this.locked = locked;
     }
 
-    public UserVM(UUID userId, String login, String username, RoleEnum role, Boolean locked) {
-        this.userId = userId;
-        this.login = login;
-        this.username = username;
-        this.role = role;
-        this.locked = locked;
+    public GenderEnum getGender() {
+        return gender;
     }
+
+    public void setGender(GenderEnum gender) {
+        this.gender = gender;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
 
     @Override
     public String toString() {

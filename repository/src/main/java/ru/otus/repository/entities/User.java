@@ -18,8 +18,15 @@ public class User {
     @Column(name = "login", nullable = false, updatable = false, unique = true)
     private String login;
 
-    @Column(name = "username", nullable = false, updatable = false, unique = true)
+    @Column(name = "username", nullable = false, updatable = true, unique = true)
     private String username;
+
+    @Column(name = "age", nullable = true, updatable = true, unique = false)
+    private Integer age;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", nullable = true, updatable = true, unique = false)
+    private GenderEnum gender;
 
     @Column(name = "password", nullable = false, updatable = true)
     private String password;
@@ -103,17 +110,33 @@ public class User {
         this.locked = locked;
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public GenderEnum getGender() {
+        return gender;
+    }
+
+    public void setGender(GenderEnum gender) {
+        this.gender = gender;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(userId, user.userId) && Objects.equals(roleId, user.roleId) && Objects.equals(login, user.login) && Objects.equals(username, user.username) && Objects.equals(password, user.password);
+        return age == user.age && Objects.equals(userId, user.userId) && Objects.equals(roleId, user.roleId) && Objects.equals(login, user.login) && Objects.equals(username, user.username) && gender == user.gender && Objects.equals(password, user.password) && Objects.equals(locked, user.locked);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, roleId, login, username, password);
+        return Objects.hash(userId, roleId, login, username, age, gender, password, locked);
     }
 }
 
