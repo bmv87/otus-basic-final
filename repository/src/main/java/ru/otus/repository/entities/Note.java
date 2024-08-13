@@ -39,7 +39,7 @@ public class Note {
     @OneToMany(mappedBy = "note", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
     private Set<Grade> grades = new HashSet<>();
 
-    @OneToMany(mappedBy = "parentNote", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "parentNote", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Set<Note> notes = new HashSet<>();
 
     public Note() {

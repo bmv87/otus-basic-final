@@ -39,7 +39,7 @@ public class NotesService implements AutoCloseable {
         }
         if (!currentUser.getUserId().equals(userId)) {
             var subscriptions = usersRepository.getUserSubscriptions(currentUser.getUserId());
-            if (subscriptions.stream().anyMatch(s -> s.getSubscriberId().equals(currentUser.getUserId()) && s.getBlogOwnerId().equals(userId))) {
+            if (subscriptions.stream().noneMatch(s -> s.getSubscriberId().equals(currentUser.getUserId()) && s.getBlogOwnerId().equals(userId))) {
                 throw new ForbiddenException("Вы не подписаны на этого пользователя");
             }
         }
@@ -75,6 +75,7 @@ public class NotesService implements AutoCloseable {
         if (noteId == null) {
             throw new UnprocessableEntityException("Идентификатор заметки не указан.");
         }
+        usersRepository.beginTransaction();
         var note = usersRepository.getNoteById(noteId);
         if (note == null) {
             throw new UnprocessableEntityException("Заметка не найдена.");
@@ -100,6 +101,7 @@ public class NotesService implements AutoCloseable {
         if (noteId == null) {
             throw new UnprocessableEntityException("Идентификатор заметки не указан.");
         }
+        usersRepository.beginTransaction();
         var note = usersRepository.getNoteById(noteId);
         if (note == null) {
             throw new UnprocessableEntityException("Заметка не найдена.");
@@ -123,6 +125,7 @@ public class NotesService implements AutoCloseable {
         if (noteId == null) {
             throw new UnprocessableEntityException("Идентификатор заметки не указан.");
         }
+        usersRepository.beginTransaction();
         var note = usersRepository.getNoteById(noteId);
         if (note == null) {
             throw new UnprocessableEntityException("Заметка не найдена.");
@@ -154,6 +157,7 @@ public class NotesService implements AutoCloseable {
         if (noteId == null) {
             throw new UnprocessableEntityException("Идентификатор заметки не указан.");
         }
+        usersRepository.beginTransaction();
         var note = usersRepository.getNoteById(noteId);
         if (note == null) {
             throw new UnprocessableEntityException("Заметка не найдена.");
