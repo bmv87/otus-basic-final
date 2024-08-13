@@ -3,30 +3,28 @@ package ru.otus.repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.repository.entities.*;
+import ru.otus.repository.models.PaginatedResult;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class UsersRepository implements AutoCloseable {
 
-    private static final String PERSISTENCE_UNIT_NAME = "USERS";
-    private static EntityManagerFactory factory;
     private static final Logger logger = LoggerFactory.getLogger(UsersRepository.class);
     private final EntityManager em;
 
     public UsersRepository() {
-        if (factory == null) {
-            factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        }
+        var factory = EntityManagerUtil.getEntityManagerFactory();
+        logger.debug(factory.toString());
+
         em = factory.createEntityManager();
+        em.setFlushMode(FlushModeType.COMMIT);
+        logger.debug(em.toString());
     }
 
     public List<User> getUsersByRole(RoleEnum role) {
@@ -39,17 +37,59 @@ public class UsersRepository implements AutoCloseable {
     }
 
 
-    public List<User> getUsers(boolean onlyActive) {
+    public PaginatedResult<User> getUsers(boolean onlyActive,
+                                          UUID excludeUserId,
+                                          String username,
+                                          GenderEnum gender,
+                                          Integer age,
+                                          Integer page,
+                                          Integer limit) {
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<User> cr = cb.createQuery(User.class);
-        Root<User> root = cr.from(User.class);
-        Join<User, Role> joinedRole = root.join("role");
-        if (onlyActive) {
-            cr.select(root).where(cb.equal(root.get("locked"), false));
-        } else {
-            cr.select(root);
+        CriteriaQuery<User> dataQuery = cb.createQuery(User.class);
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        Root<User> dataRoot = dataQuery.from(User.class);
+        Root<User> countRoot = countQuery.from(User.class);
+        Join<User, Role> joinedRole = dataRoot.join("role");
+        var dataPredicates = new ArrayList<Predicate>();
+        var countPredicates = new ArrayList<Predicate>();
+        if (excludeUserId != null) {
+            dataPredicates.add(cb.notEqual(dataRoot.get("userId"), excludeUserId));
+            countPredicates.add(cb.notEqual(countRoot.get("userId"), excludeUserId));
         }
-        return em.createQuery(cr).getResultList();
+        if (username != null && !username.isBlank()) {
+            dataPredicates.add(cb.like(cb.lower(dataRoot.get("username")), "%" + username.toLowerCase() + "%"));
+            countPredicates.add(cb.like(cb.lower(countRoot.get("username")), "%" + username.toLowerCase() + "%"));
+        }
+        if (gender != null) {
+            dataPredicates.add(cb.equal(dataRoot.get("gender"), gender));
+            countPredicates.add(cb.equal(countRoot.get("gender"), gender));
+        }
+        if (age != null) {
+            dataPredicates.add(cb.equal(dataRoot.get("age"), age));
+            countPredicates.add(cb.equal(countRoot.get("age"), age));
+        }
+        if (onlyActive) {
+            dataPredicates.add(cb.equal(dataRoot.get("locked"), false));
+            countPredicates.add(cb.equal(countRoot.get("locked"), false));
+        }
+
+        countQuery.select(cb.count(countRoot));
+        dataQuery.select(dataRoot);
+        if (!dataPredicates.isEmpty()) {
+            dataQuery.where(cb.and(dataPredicates.toArray(new Predicate[dataPredicates.size()])));
+            countQuery.where(cb.and(countPredicates.toArray(new Predicate[countPredicates.size()])));
+        }
+        Long count = em.createQuery(countQuery).getSingleResult();
+
+        var query = em.createQuery(dataQuery);
+        if (limit != null && limit > 0) {
+            page = page == null ? 1 : page;
+            var offset = (page - 1) * limit;
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
+        }
+        return new PaginatedResult<>(count, em.createQuery(dataQuery).getResultList());
     }
 
     public void beginTransaction() {
@@ -61,10 +101,20 @@ public class UsersRepository implements AutoCloseable {
     }
 
     public void saveContext() {
+
         var transaction = em.getTransaction();
         if (transaction.isActive()) {
-            transaction.commit();
+            try {
+                em.flush();
+                transaction.commit();
+            } catch (RuntimeException e) {
+                if (transaction.isActive()) {
+                    transaction.rollback();
+                }
+                throw e;
+            }
         }
+
     }
 
     public void createUser(User user) {
@@ -95,12 +145,12 @@ public class UsersRepository implements AutoCloseable {
 
     public void deleteSubscription(Subscription subscription) {
         beginTransaction();
-        em.remove(subscription);
+        em.remove(em.contains(subscription) ? subscription : em.merge(subscription));
     }
 
     public void deleteNote(Note note) {
         beginTransaction();
-        em.remove(note);
+        em.remove(em.contains(note) ? note : em.merge(note));
     }
 
     public void saveGrade(Grade grade) {
@@ -179,6 +229,15 @@ public class UsersRepository implements AutoCloseable {
         return note;
     }
 
+    public List<Note> getNotesByParentId(UUID id) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Note> cr = cb.createQuery(Note.class);
+        Root<Note> root = cr.from(Note.class);
+
+        CriteriaQuery<Note> where = cr.select(root).where(cb.equal(root.get("parentNoteId"), id));
+        return em.createQuery(where).getResultList();
+    }
+
 
     public List<Note> getNotesByUserId(UUID id) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -255,13 +314,10 @@ public class UsersRepository implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
+        logger.debug(em.toString());
 
         if (em.isOpen()) {
             em.close();
-        }
-        if (factory != null) {
-            factory.close();
-            factory = null;
         }
     }
 }

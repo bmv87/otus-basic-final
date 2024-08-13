@@ -2,10 +2,12 @@ package ru.otus.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.otus.repository.EntityManagerUtil;
 import ru.otus.services.cache.CacheManager;
 import ru.otus.services.cache.CacheNames;
 import ru.otus.web.routing.RouteDispatcher;
 
+import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -33,11 +35,13 @@ public class HttpServer implements AutoCloseable {
         } catch (IOException e) {
             logger.error("Ошибка запуска сервере или ожидания подключения.", e);
             clientPool.shutdown();
+            EntityManagerUtil.shutdown();
         }
     }
 
     @Override
     public void close() throws Exception {
         clientPool.shutdown();
+        EntityManagerUtil.shutdown();
     }
 }
