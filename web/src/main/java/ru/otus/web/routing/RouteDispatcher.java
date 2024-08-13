@@ -71,7 +71,12 @@ public class RouteDispatcher {
             var routePath = context.getRequest().getPath();
             var method = context.getRequest().getMethod();
 
-            var key = routes.keySet().stream().sorted().filter(route -> route.isSameRoute(method, routePath)).findFirst().orElse(null);
+            var key = routes.keySet().stream()
+                    .sorted()
+                    .filter(rote -> rote.getMethod() == method)
+                    .filter(route -> route.isSameRoutePath(routePath))
+                    .findFirst()
+                    .orElse(null);
             if (key == null) {
                 throw new NotFoundException("Маршрут не зарегистрирован.");
             }

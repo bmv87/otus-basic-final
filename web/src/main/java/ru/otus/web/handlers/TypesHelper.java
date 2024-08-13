@@ -13,7 +13,9 @@ public class TypesHelper {
     private static double DEFAULT_DOUBLE;
 
     public static Object getDefaultValue(Class clazz) {
-        if (clazz.equals(boolean.class)) {
+        if (!clazz.isPrimitive()) {
+            return null;
+        } else if (clazz.equals(boolean.class)) {
             return DEFAULT_BOOLEAN;
         } else if (clazz.equals(byte.class)) {
             return DEFAULT_BYTE;

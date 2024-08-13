@@ -76,35 +76,44 @@ public class RouteHandler implements HttpContextHandler {
     }
 
     private void tryInvoke(Method method, HttpResponse response) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+
         var inst = method.getDeclaringClass().getConstructor().newInstance();
-        if (method.getReturnType().equals(Void.TYPE)) {
-            method.invoke(inst);
-            response.setResponseCode(StatusCode.OK);
-        } else {
-            response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst)), StatusCode.OK));
-        }
-        if (inst instanceof AutoCloseable closable) {
-            try {
-                closable.close();
-            } catch (Exception e) {
-                logger.error("Ошибка при закрытии ресурса.", e);
+        try {
+            if (method.getReturnType().equals(Void.TYPE)) {
+                method.invoke(inst);
+                response.setResponseCode(StatusCode.OK);
+            } else {
+                response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst)), StatusCode.OK));
+            }
+        } finally {
+            if (inst instanceof AutoCloseable closable) {
+                try {
+                    logger.debug(closable.toString());
+                    closable.close();
+                } catch (Exception e) {
+                    logger.error("Ошибка при закрытии ресурса.", e);
+                }
             }
         }
     }
 
     private void tryInvokeWithParams(Method method, List<Object> params, HttpResponse response) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         var inst = method.getDeclaringClass().getConstructor().newInstance();
-        if (method.getReturnType().equals(Void.TYPE)) {
-            method.invoke(inst, params.toArray());
-            response.setResponseCode(StatusCode.OK);
-        } else {
-            response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst, params.toArray())), StatusCode.OK));
-        }
-        if (inst instanceof AutoCloseable closable) {
-            try {
-                closable.close();
-            } catch (Exception e) {
-                logger.error("Ошибка при закрытии ресурса.", e);
+        try {
+            if (method.getReturnType().equals(Void.TYPE)) {
+                method.invoke(inst, params.toArray());
+                response.setResponseCode(StatusCode.OK);
+            } else {
+                response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst, params.toArray())), StatusCode.OK));
+            }
+        } finally {
+            if (inst instanceof AutoCloseable closable) {
+                try {
+                    logger.debug(closable.toString());
+                    closable.close();
+                } catch (Exception e) {
+                    logger.error("Ошибка при закрытии ресурса.", e);
+                }
             }
         }
     }

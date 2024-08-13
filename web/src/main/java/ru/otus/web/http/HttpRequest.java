@@ -79,7 +79,8 @@ public class HttpRequest {
             String[] keysValues = elements[1].split("&");
             for (String o : keysValues) {
                 String[] keyValue = o.split("=");
-                this.parameters.put(keyValue[0], keyValue[1]);
+                var value = keyValue.length > 1 ? keyValue[1] : null;
+                this.parameters.put(keyValue[0], value);
             }
         }
         if (method == HttpMethod.POST || method == HttpMethod.PUT) {
@@ -94,7 +95,8 @@ public class HttpRequest {
         var rawHeaders = rawRequest.substring(startHeadersIndex, endHeadersIndex).split("\r\n");
         for (String header : rawHeaders) {
             var keyValue = header.split(": ", 2);
-            headers.put(keyValue[0].toLowerCase(), keyValue[1]);
+            var value = keyValue.length > 1 ? keyValue[1] : "";
+            headers.put(keyValue[0].toLowerCase(), value);
         }
         logInfo();
     }

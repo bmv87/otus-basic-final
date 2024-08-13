@@ -5,19 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/GenderEnum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/models/PaginatedResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/Pagination.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/UserEditVM.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Note.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Note.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/resources/db/initial_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/resources/db/initial_data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/NotesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/NotesService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/UsersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/UsersService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/UserVM.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/user/UserVM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/controllers/UsersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/controllers/UsersController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/OptionsRequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/OptionsRequestHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/TypesHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/TypesHelper.java" afterDir="false" />
@@ -182,7 +170,23 @@
       <option name="project" value="LOCAL" />
       <updated>1723561476915</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="feat: edit user profile &amp; users filters logic">
+      <option name="closed" value="true" />
+      <created>1723561579487</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1723561579487</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fix: validations &amp; transactions">
+      <option name="closed" value="true" />
+      <created>1723561662468</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1723561662468</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -192,7 +196,9 @@
     <MESSAGE value="fix:route handlers" />
     <MESSAGE value="feat: login edited" />
     <MESSAGE value="fix: EntityManagerUtil &amp; UsersRepository" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: EntityManagerUtil &amp; UsersRepository" />
+    <MESSAGE value="feat: edit user profile &amp; users filters logic" />
+    <MESSAGE value="fix: validations &amp; transactions" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: validations &amp; transactions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -16,7 +16,6 @@ public class OptionsRequestHandler implements HttpContextHandler {
     private final String ANY_VALUE = "*";
 
     public OptionsRequestHandler(Map<String, String> headers) {
-//        this.headers.put(Constants.Headers.ACCEPT, Constants.MimeTypes.JSON);
         this.headers.put(Constants.Headers.CONTENT_LENGTH, "0");
         this.headers.put(Constants.Headers.CONNECTION, "keep-alive");
 
