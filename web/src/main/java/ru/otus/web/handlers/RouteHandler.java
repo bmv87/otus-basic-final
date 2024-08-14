@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.services.exceptions.BadRequestException;
 import ru.otus.services.exceptions.ResponseException;
+import ru.otus.web.helpers.GsonConfigurator;
+import ru.otus.web.helpers.TypesHelper;
 import ru.otus.web.http.HttpContext;
 import ru.otus.web.http.HttpResponse;
 import ru.otus.web.http.StatusCode;
@@ -81,19 +83,12 @@ public class RouteHandler implements HttpContextHandler {
         try {
             if (method.getReturnType().equals(Void.TYPE)) {
                 method.invoke(inst);
-                response.setResponseCode(StatusCode.OK);
+                response.setResponseCode(StatusCode.NO_CONTENT);
             } else {
                 response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst)), StatusCode.OK));
             }
         } finally {
-            if (inst instanceof AutoCloseable closable) {
-                try {
-                    logger.debug(closable.toString());
-                    closable.close();
-                } catch (Exception e) {
-                    logger.error("Ошибка при закрытии ресурса.", e);
-                }
-            }
+            tryClose(inst);
         }
     }
 
@@ -102,18 +97,22 @@ public class RouteHandler implements HttpContextHandler {
         try {
             if (method.getReturnType().equals(Void.TYPE)) {
                 method.invoke(inst, params.toArray());
-                response.setResponseCode(StatusCode.OK);
+                response.setResponseCode(StatusCode.NO_CONTENT);
             } else {
                 response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst, params.toArray())), StatusCode.OK));
             }
         } finally {
-            if (inst instanceof AutoCloseable closable) {
-                try {
-                    logger.debug(closable.toString());
-                    closable.close();
-                } catch (Exception e) {
-                    logger.error("Ошибка при закрытии ресурса.", e);
-                }
+            tryClose(inst);
+        }
+    }
+
+    private <T> void tryClose(T instance) {
+        if (instance instanceof AutoCloseable closable) {
+            try {
+                logger.debug(closable.toString());
+                closable.close();
+            } catch (Exception e) {
+                logger.error("Ошибка при закрытии ресурса.", e);
             }
         }
     }

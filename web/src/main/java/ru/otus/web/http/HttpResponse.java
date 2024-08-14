@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.services.exceptions.ResponseException;
-import ru.otus.web.handlers.GsonConfigurator;
+import ru.otus.web.helpers.GsonConfigurator;
 import ru.otus.web.models.ResponseEntity;
 
 import java.io.IOException;
@@ -22,22 +22,20 @@ public class HttpResponse {
     private StatusCode responseCode;
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
+
     public HttpResponse(OutputStream out) {
         this.out = out;
         this.headers.put(Constants.Headers.CONTENT_TYPE, Constants.MimeTypes.JSON);
         this.headers.put(Constants.Headers.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-        this.headers.put(Constants.Headers.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-        this.headers.put(Constants.Headers.ACCESS_CONTROL_ALLOW_HEADERS, Constants.Headers.CONTENT_TYPE + ", " + Constants.Headers.TOKEN);
-        this.headers.put(Constants.Headers.ACCESS_CONTROL_REQUEST_HEADERS, Constants.Headers.CONTENT_TYPE + ", " + Constants.Headers.TOKEN);
+        this.headers.put(Constants.Headers.ACCESS_CONTROL_ALLOW_ORIGIN, Constants.ANY_VALUE);
+        var allowedHeaders = Constants.Headers.CONTENT_TYPE + ", " + Constants.Headers.TOKEN;
+        this.headers.put(Constants.Headers.ACCESS_CONTROL_ALLOW_HEADERS, allowedHeaders);
+        this.headers.put(Constants.Headers.ACCESS_CONTROL_REQUEST_HEADERS, allowedHeaders);
         this.setResponseCode(StatusCode.OK);
     }
 
     public void setProtocol(String protocol) {
         this.protocol = protocol;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
     }
 
     public void addHeader(String key, String value) {

@@ -1,4 +1,4 @@
-package ru.otus.web.handlers;
+package ru.otus.web.helpers;
 
 import com.google.gson.*;
 

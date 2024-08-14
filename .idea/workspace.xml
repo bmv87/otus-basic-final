@@ -5,12 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/NotFoundHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/helpers/ApplicationArgumentsHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionResponseProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/GsonConfigurator.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/helpers/GsonConfigurator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/OptionsRequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/OptionsRequestHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/TypesHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/TypesHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/Route.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/Route.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/TypesHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/helpers/TypesHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/RouteDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/RouteDispatcher.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,6 +89,7 @@
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ru.otus.web.Main" />
       <module name="web" />
+      <option name="PROGRAM_PARAMETERS" value="-port:8189" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="ru.otus.web.*" />
@@ -106,6 +113,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.Seed" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
@@ -186,7 +197,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723561662468</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fix: route handlers (params, default values, exceptions)">
+      <option name="closed" value="true" />
+      <created>1723562084657</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1723562084657</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -198,7 +217,8 @@
     <MESSAGE value="fix: EntityManagerUtil &amp; UsersRepository" />
     <MESSAGE value="feat: edit user profile &amp; users filters logic" />
     <MESSAGE value="fix: validations &amp; transactions" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: validations &amp; transactions" />
+    <MESSAGE value="fix: route handlers (params, default values, exceptions)" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: route handlers (params, default values, exceptions)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -212,11 +232,6 @@
           <url>file://$PROJECT_DIR$/services/src/main/java/ru/otus/services/NotesService.java</url>
           <line>145</line>
           <option name="timeStamp" value="39" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/TypesHelper.java</url>
-          <line>17</line>
-          <option name="timeStamp" value="43" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

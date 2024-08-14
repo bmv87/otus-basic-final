@@ -13,7 +13,6 @@ import java.util.Map;
 public class OptionsRequestHandler implements HttpContextHandler {
     private Map<String, String> headers = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(OptionsRequestHandler.class);
-    private final String ANY_VALUE = "*";
 
     public OptionsRequestHandler(Map<String, String> headers) {
         this.headers.put(Constants.Headers.CONTENT_LENGTH, "0");

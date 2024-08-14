@@ -1,6 +1,8 @@
 package ru.otus.web.http;
 
 public class Constants {
+    public static final String ANY_VALUE = "*";
+
     public static class Headers {
         public static final String CONTENT_TYPE = "Content-Type";
         public static final String TOKEN = "Token";
