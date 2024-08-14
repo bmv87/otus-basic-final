@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.web.http.Constants;
 import ru.otus.web.http.HttpContext;
-import ru.otus.web.http.StatusCode;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,7 +32,6 @@ public class OptionsRequestHandler implements HttpContextHandler {
         for (var header : this.headers.entrySet()) {
             response.addHeader(header.getKey(), header.getValue());
         }
-        response.setResponseCode(StatusCode.OK);
-        response.send();
+        response.ok().send();
     }
 }

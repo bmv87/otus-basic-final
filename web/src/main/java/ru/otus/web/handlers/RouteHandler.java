@@ -11,7 +11,6 @@ import ru.otus.web.helpers.TypesHelper;
 import ru.otus.web.http.HttpContext;
 import ru.otus.web.http.HttpResponse;
 import ru.otus.web.http.StatusCode;
-import ru.otus.web.models.ResponseEntity;
 import ru.otus.web.routing.FromBody;
 import ru.otus.web.routing.ParamVariable;
 import ru.otus.web.routing.PathVariable;
@@ -83,9 +82,9 @@ public class RouteHandler implements HttpContextHandler {
         try {
             if (method.getReturnType().equals(Void.TYPE)) {
                 method.invoke(inst);
-                response.setResponseCode(StatusCode.NO_CONTENT);
+                response.noContent();
             } else {
-                response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst)), StatusCode.OK));
+                response.ok(method.invoke(inst));
             }
         } finally {
             tryClose(inst);
@@ -96,10 +95,10 @@ public class RouteHandler implements HttpContextHandler {
         var inst = method.getDeclaringClass().getConstructor().newInstance();
         try {
             if (method.getReturnType().equals(Void.TYPE)) {
+                response.noContent();
                 method.invoke(inst, params.toArray());
-                response.setResponseCode(StatusCode.NO_CONTENT);
             } else {
-                response.setResponse(new ResponseEntity<>(method.getReturnType().cast(method.invoke(inst, params.toArray())), StatusCode.OK));
+                response.ok(method.invoke(inst, params.toArray()));
             }
         } finally {
             tryClose(inst);

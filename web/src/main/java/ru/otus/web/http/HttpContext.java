@@ -18,8 +18,7 @@ public class HttpContext implements AutoCloseable {
         this.connection = connection;
         try {
             request = new HttpRequest(connection.getInputStream());
-            response = new HttpResponse(connection.getOutputStream());
-            response.setProtocol(request.getProtocol());
+            response = new HttpResponse(connection.getOutputStream(), request.getProtocol());
         } catch (IOException e) {
             throw new RuntimeException("Ошибка создания объекта HttpContext.", e);
         }

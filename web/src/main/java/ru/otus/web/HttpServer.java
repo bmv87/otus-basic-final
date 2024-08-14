@@ -7,7 +7,6 @@ import ru.otus.services.cache.CacheManager;
 import ru.otus.services.cache.CacheNames;
 import ru.otus.web.routing.RouteDispatcher;
 
-import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
