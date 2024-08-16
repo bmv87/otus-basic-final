@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.services.exceptions.ResponseException;
+import ru.otus.services.helpers.ApplicationPropertiesHelper;
 import ru.otus.web.helpers.GsonConfigurator;
 import ru.otus.web.models.ByteArrayBody;
 
@@ -106,10 +107,13 @@ public class HttpResponse {
     }
 
     private void setDefaultHeaders() {
-        addHeader(Constants.Headers.CONTENT_TYPE, Constants.MimeTypes.JSON);
+        addHeader(Constants.Headers.CONNECTION, Constants.CONNECTION_KEEP_ALIVE);
         addHeader(Constants.Headers.CONTENT_TYPE, Constants.MimeTypes.JSON);
         addHeader(Constants.Headers.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-        addHeader(Constants.Headers.ACCESS_CONTROL_ALLOW_ORIGIN, Constants.ANY_VALUE);
+        var allowOrigin = ApplicationPropertiesHelper.tryGet(ApplicationPropertiesHelper.CORS_ALLOW_ORIGIN_PARAM_NANE, String.class);
+        if (allowOrigin != null && !allowOrigin.isBlank()) {
+            addHeader(Constants.Headers.ACCESS_CONTROL_ALLOW_ORIGIN, allowOrigin);
+        }
         var allowedHeaders = Constants.Headers.CONTENT_TYPE + ", " + Constants.Headers.TOKEN + ", " + Constants.Headers.CONTENT_DISPOSITION;
         addHeader(Constants.Headers.ACCESS_CONTROL_ALLOW_HEADERS, allowedHeaders);
         addHeader(Constants.Headers.ACCESS_CONTROL_EXPOSE_HEADERS, allowedHeaders);
