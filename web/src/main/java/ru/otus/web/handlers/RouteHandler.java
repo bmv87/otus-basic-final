@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import ru.otus.services.exceptions.BadRequestException;
 import ru.otus.services.exceptions.ResponseException;
 import ru.otus.web.helpers.GsonConfigurator;
-import ru.otus.web.helpers.TypesHelper;
+import ru.otus.services.helpers.TypesHelper;
 import ru.otus.web.http.Constants;
 import ru.otus.web.http.HttpContext;
 import ru.otus.web.http.HttpResponse;

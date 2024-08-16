@@ -5,6 +5,7 @@ import ru.otus.repository.entities.FileInfo;
 import ru.otus.services.exceptions.ForbiddenException;
 import ru.otus.services.exceptions.NotFoundException;
 import ru.otus.services.exceptions.ResponseException;
+import ru.otus.services.helpers.ApplicationPropertiesHelper;
 import ru.otus.services.models.file.DownloadFileVM;
 import ru.otus.services.models.file.FileItemVM;
 import ru.otus.services.models.file.FileUploadingResponseVM;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 public class FilesService implements AutoCloseable {
     private final DBRepository repository;
-    private final String FILES_STORE_DIRECTORY = "files";
+    private final String FILES_STORE_DIRECTORY = ApplicationPropertiesHelper.tryGet(ApplicationPropertiesHelper.FILES_STORE_DIRECTORY_PARAM_NANE, String.class);
 
     public FilesService() {
         repository = new DBRepository();

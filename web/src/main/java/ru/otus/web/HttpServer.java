@@ -15,22 +15,25 @@ import java.util.concurrent.Executors;
 
 public class HttpServer implements AutoCloseable {
     private final int port;
+    private final int receiveBufferSize;
     private final ExecutorService clientPool = Executors.newCachedThreadPool();
     private static final Logger logger = LoggerFactory.getLogger(HttpServer.class);
 
-    public HttpServer(int port) {
+    public HttpServer(int port, int receiveBufferSize) {
         this.port = port;
         CacheManager.getInstance().addCacheStore(CacheNames.AUTH);
+        this.receiveBufferSize = receiveBufferSize;
     }
 
     public void start() {
         var dispatcher = new RouteDispatcher();
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            serverSocket.setReceiveBufferSize(1048576);
+            serverSocket.setReceiveBufferSize(receiveBufferSize);
             logger.info("Сервер запущен на порту: {}", port);
+
             while (!serverSocket.isClosed() && !Thread.currentThread().isInterrupted()) {
                 Socket socket = serverSocket.accept();
-                socket.setReceiveBufferSize(1048576);
+                socket.setReceiveBufferSize(receiveBufferSize);
                 socket.setKeepAlive(true);
                 clientPool.submit(new RequestHandler(socket, dispatcher));
             }

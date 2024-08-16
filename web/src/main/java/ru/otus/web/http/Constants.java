@@ -2,6 +2,7 @@ package ru.otus.web.http;
 
 public class Constants {
     public static final String ANY_VALUE = "*";
+    public static final String CONNECTION_KEEP_ALIVE = "keep-alive";
 
     public static class Headers {
         public static final String CONTENT_DISPOSITION = "Content-Disposition";
