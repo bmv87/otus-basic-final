@@ -1,4 +1,4 @@
-package ru.otus.web.helpers;
+package ru.otus.services.helpers;
 
 import java.util.UUID;
 
@@ -12,23 +12,23 @@ public class TypesHelper {
     private static float DEFAULT_FLOAT;
     private static double DEFAULT_DOUBLE;
 
-    public static Object getDefaultValue(Class clazz) {
+    public static <T> T getDefaultValue(Class<T> clazz) {
         if (!clazz.isPrimitive()) {
             return null;
         } else if (clazz.equals(boolean.class)) {
-            return DEFAULT_BOOLEAN;
+            return clazz.cast(DEFAULT_BOOLEAN);
         } else if (clazz.equals(byte.class)) {
-            return DEFAULT_BYTE;
+            return clazz.cast(DEFAULT_BYTE);
         } else if (clazz.equals(short.class)) {
-            return DEFAULT_SHORT;
+            return clazz.cast(DEFAULT_SHORT);
         } else if (clazz.equals(int.class)) {
-            return DEFAULT_INT;
+            return clazz.cast(DEFAULT_INT);
         } else if (clazz.equals(long.class)) {
-            return DEFAULT_LONG;
+            return clazz.cast(DEFAULT_LONG);
         } else if (clazz.equals(float.class)) {
-            return DEFAULT_FLOAT;
+            return clazz.cast(DEFAULT_FLOAT);
         } else if (clazz.equals(double.class)) {
-            return DEFAULT_DOUBLE;
+            return clazz.cast(DEFAULT_DOUBLE);
         } else if (clazz.equals(String.class)) {
             return null;
         } else {
@@ -37,36 +37,36 @@ public class TypesHelper {
         }
     }
 
-    public static Object getTypedValue(Class clazz, String value) {
+    public static <T> T getTypedValue(Class<T> clazz, String value) {
         boolean isEmptyValue = value == null || value.isBlank();
         if (clazz.equals(boolean.class)) {
-            return isEmptyValue ? getDefaultValue(clazz) : Boolean.getBoolean(value);
+            return clazz.cast(isEmptyValue ? getDefaultValue(clazz) : Boolean.getBoolean(value));
         } else if (clazz.equals(Boolean.class)) {
-            return isEmptyValue ? null : Boolean.parseBoolean(value);
+            return clazz.cast(isEmptyValue ? null : Boolean.parseBoolean(value));
         } else if (clazz.equals(short.class)) {
-            return isEmptyValue ? getDefaultValue(clazz) : Short.parseShort(value);
+            return clazz.cast(isEmptyValue ? getDefaultValue(clazz) : Short.parseShort(value));
         } else if (clazz.equals(Short.class)) {
-            return isEmptyValue ? null : Short.parseShort(value);
+            return clazz.cast(isEmptyValue ? null : Short.parseShort(value));
         } else if (clazz.equals(int.class)) {
-            return isEmptyValue ? getDefaultValue(clazz) : Integer.parseInt(value);
+            return clazz.cast(isEmptyValue ? getDefaultValue(clazz) : Integer.parseInt(value));
         } else if (clazz.equals(Integer.class)) {
-            return isEmptyValue ? null : Integer.parseInt(value);
+            return clazz.cast(isEmptyValue ? null : Integer.parseInt(value));
         } else if (clazz.equals(long.class)) {
-            return isEmptyValue ? getDefaultValue(clazz) : Long.parseLong(value);
+            return clazz.cast(isEmptyValue ? getDefaultValue(clazz) : Long.parseLong(value));
         } else if (clazz.equals(Long.class)) {
-            return isEmptyValue ? null : Long.parseLong(value);
+            return clazz.cast(isEmptyValue ? null : Long.parseLong(value));
         } else if (clazz.equals(float.class)) {
-            return isEmptyValue ? getDefaultValue(clazz) : Float.parseFloat(value);
+            return clazz.cast(isEmptyValue ? getDefaultValue(clazz) : Float.parseFloat(value));
         } else if (clazz.equals(Float.class)) {
-            return isEmptyValue ? null : Float.parseFloat(value);
+            return clazz.cast(isEmptyValue ? null : Float.parseFloat(value));
         } else if (clazz.equals(double.class)) {
-            return isEmptyValue ? getDefaultValue(clazz) : Double.parseDouble(value);
+            return clazz.cast(isEmptyValue ? getDefaultValue(clazz) : Double.parseDouble(value));
         } else if (clazz.equals(Double.class)) {
-            return isEmptyValue ? null : Double.parseDouble(value);
+            return clazz.cast(isEmptyValue ? null : Double.parseDouble(value));
         } else if (clazz.equals(UUID.class)) {
-            return isEmptyValue ? null : UUID.fromString(value);
+            return clazz.cast(isEmptyValue ? null : UUID.fromString(value));
         } else if (clazz.equals(String.class)) {
-            return value;
+            return clazz.cast(value);
         } else {
             throw new IllegalArgumentException(
                     "Class type " + clazz + " not supported");
