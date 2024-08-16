@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/RouteParamsCollector.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/exceptions/NotAcceptableException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/invokers/ControllerInvoker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/invokers/FileContentInvoker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/invokers/JSONContentInvoker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/invokers/NoContentInvoker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/http/StatusCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/http/StatusCode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/StatusCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/StatusCode.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,9 +23,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Enum" />
         <option value="AnnotationType" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -261,7 +267,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723823487071</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="feat: RouteParamsCollector added &amp; RouteHandler refactoring">
+      <option name="closed" value="true" />
+      <created>1723827194223</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1723827194223</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -281,7 +295,8 @@
     <MESSAGE value="feat: HttpResponse refactoring" />
     <MESSAGE value="feat: HttpRequest refactoring" />
     <MESSAGE value="feat: application.properties loader" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: application.properties loader" />
+    <MESSAGE value="feat: RouteParamsCollector added &amp; RouteHandler refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: RouteParamsCollector added &amp; RouteHandler refactoring" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
