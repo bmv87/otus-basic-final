@@ -56,9 +56,7 @@ public class HttpRequest {
                 break;
             }
         }
-        var bodyStr = bodyB != null ? new String(bodyB, StandardCharsets.UTF_8) : "";
-        rawRequest = sb.append(bodyStr).toString();
-        body = bodyStr;
+        rawRequest = sb.toString();
         logger.debug("{}{}", System.lineSeparator(), rawRequest);
 
         this.parse();
@@ -119,14 +117,7 @@ public class HttpRequest {
                 this.parameters.put(keyValue[0], value);
             }
         }
-//        if (method == HttpMethod.POST || method == HttpMethod.PUT) {
-//            this.body = rawRequest.substring(
-//                    rawRequest.indexOf("\r\n\r\n") + 4
-//            );
-//        }
-        if (method != HttpMethod.POST && method != HttpMethod.PUT) {
-            this.body = null;
-        }
+
         int startHeadersIndex = rawRequest.indexOf('\n') + 1;
         int endHeadersIndex = rawRequest.indexOf("\r\n\r\n", startHeadersIndex);
 
@@ -135,6 +126,10 @@ public class HttpRequest {
             var keyValue = header.split(": ", 2);
             var value = keyValue.length > 1 ? keyValue[1] : "";
             headers.put(keyValue[0].toLowerCase(), value);
+        }
+        if ((method == HttpMethod.POST || method == HttpMethod.PUT) &&
+                !headers.containsKey(Constants.Headers.CONTENT_DISPOSITION)) {
+            this.body = bodyB != null ? new String(bodyB, StandardCharsets.UTF_8) : "";
         }
         logInfo();
     }
