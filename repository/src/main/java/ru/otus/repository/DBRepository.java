@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class UsersRepository implements AutoCloseable {
+public class DBRepository implements AutoCloseable {
 
-    private static final Logger logger = LoggerFactory.getLogger(UsersRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(DBRepository.class);
     private final EntityManager em;
 
-    public UsersRepository() {
+    public DBRepository() {
         var factory = EntityManagerUtil.getEntityManagerFactory();
         logger.debug(factory.toString());
 
@@ -27,15 +27,30 @@ public class UsersRepository implements AutoCloseable {
         logger.debug(em.toString());
     }
 
-    public List<User> getUsersByRole(RoleEnum role) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<User> cr = cb.createQuery(User.class);
-        Root<User> root = cr.from(User.class);
-        Join<User, Role> joinedRole = root.join("role");
-        cr.select(root).where(cb.equal(joinedRole.get("name"), role));
-        return em.createQuery(cr).getResultList();
+    public void beginTransaction() {
+        var transaction = em.getTransaction();
+        if (transaction.isActive()) {
+            return;
+        }
+        transaction.begin();
     }
 
+    public void saveContext() {
+
+        var transaction = em.getTransaction();
+        if (transaction.isActive()) {
+            try {
+                em.flush();
+                transaction.commit();
+            } catch (RuntimeException e) {
+                if (transaction.isActive()) {
+                    transaction.rollback();
+                }
+                throw e;
+            }
+        }
+
+    }
 
     public PaginatedResult<User> getUsers(boolean onlyActive,
                                           UUID excludeUserId,
@@ -50,7 +65,6 @@ public class UsersRepository implements AutoCloseable {
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         Root<User> dataRoot = dataQuery.from(User.class);
         Root<User> countRoot = countQuery.from(User.class);
-        Join<User, Role> joinedRole = dataRoot.join("role");
         var dataPredicates = new ArrayList<Predicate>();
         var countPredicates = new ArrayList<Predicate>();
         if (excludeUserId != null) {
@@ -92,82 +106,20 @@ public class UsersRepository implements AutoCloseable {
         return new PaginatedResult<>(count, em.createQuery(dataQuery).getResultList());
     }
 
-    public void beginTransaction() {
-        var transaction = em.getTransaction();
-        if (transaction.isActive()) {
-            return;
-        }
-        transaction.begin();
-    }
-
-    public void saveContext() {
-
-        var transaction = em.getTransaction();
-        if (transaction.isActive()) {
-            try {
-                em.flush();
-                transaction.commit();
-            } catch (RuntimeException e) {
-                if (transaction.isActive()) {
-                    transaction.rollback();
-                }
-                throw e;
-            }
-        }
-
-    }
-
-    public void createUser(User user) {
+    public <T> void delete(T entity) {
         beginTransaction();
-        em.persist(user);
+        em.remove(em.contains(entity) ? entity : em.merge(entity));
     }
 
-    public void updateUser(User user) {
+    public <T> void save(T entity) {
         beginTransaction();
-        em.merge(user);
+        em.persist(entity);
     }
 
-    public void saveNote(Note note) {
+    public <T> void update(T entity) {
         beginTransaction();
-        em.persist(note);
+        em.merge(entity);
     }
-
-
-    public void updateNote(Note note) {
-        beginTransaction();
-        em.merge(note);
-    }
-
-    public void saveSubscription(Subscription subscription) {
-        beginTransaction();
-        em.persist(subscription);
-    }
-
-    public void deleteSubscription(Subscription subscription) {
-        beginTransaction();
-        em.remove(em.contains(subscription) ? subscription : em.merge(subscription));
-    }
-
-    public void deleteNote(Note note) {
-        beginTransaction();
-        em.remove(em.contains(note) ? note : em.merge(note));
-    }
-
-    public void saveGrade(Grade grade) {
-        beginTransaction();
-        em.persist(grade);
-    }
-
-    public void updateGrade(Grade grade) {
-        beginTransaction();
-        em.merge(grade);
-    }
-
-    public void saveRole(Role role) {
-        beginTransaction();
-        em.persist(role);
-    }
-
 
     public boolean isInRole(String login, RoleEnum role) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -251,6 +203,31 @@ public class UsersRepository implements AutoCloseable {
         return em.createQuery(where).getResultList();
     }
 
+    public List<FileInfo> getFilesByUserId(UUID id) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<FileInfo> cr = cb.createQuery(FileInfo.class);
+        Root<FileInfo> root = cr.from(FileInfo.class);
+
+        CriteriaQuery<FileInfo> where = cr.select(root).where(cb.equal(root.get("userId"), id));
+
+        return em.createQuery(where).getResultList();
+    }
+
+    public FileInfo getFileById(UUID id) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<FileInfo> cr = cb.createQuery(FileInfo.class);
+        Root<FileInfo> root = cr.from(FileInfo.class);
+
+        CriteriaQuery<FileInfo> where = cr.select(root).where(cb.equal(root.get("fileId"), id));
+
+        try {
+           return em.createQuery(where).getSingleResult();
+        } catch (NoResultException e) {
+            logger.error("FileInfo not found by id {}", id, e);
+        }
+        return null;
+    }
+
 
     public List<Subscription> getUserSubscriptions(UUID subscriberId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -271,13 +248,12 @@ public class UsersRepository implements AutoCloseable {
         CriteriaQuery<Subscription> where = cr.select(root).where(
                 cb.and(cb.equal(root.get("subscriberId"), subscriberId),
                         cb.equal(root.get("blogOwnerId"), blogOwnerId)));
-        Subscription subscription = null;
         try {
-            subscription = em.createQuery(where).getSingleResult();
+            return em.createQuery(where).getSingleResult();
         } catch (NoResultException e) {
             logger.error("Note not found by subscriberId {} blogOwnerId {}", subscriberId, blogOwnerId, e);
         }
-        return subscription;
+        return null;
     }
 
     public Grade getGrade(UUID noteId, UUID userId) {
@@ -288,13 +264,12 @@ public class UsersRepository implements AutoCloseable {
         CriteriaQuery<Grade> where = cr.select(root).where(
                 cb.and(cb.equal(root.get("noteId"), noteId),
                         cb.equal(root.get("userId"), userId)));
-        Grade grade = null;
         try {
-            grade = em.createQuery(where).getSingleResult();
+            return em.createQuery(where).getSingleResult();
         } catch (NoResultException e) {
             logger.error("Grade not found by noteId {} userId {}", noteId, userId, e);
         }
-        return grade;
+        return null;
     }
 
     public UUID getRoleId(RoleEnum role) {
@@ -303,13 +278,21 @@ public class UsersRepository implements AutoCloseable {
         Root<Role> root = cr.from(Role.class);
 
         cr.select(root.get("roleId")).where(cb.equal(root.get("name"), role));
-        UUID id = null;
         try {
-            id = em.createQuery(cr).getSingleResult();
+            return em.createQuery(cr).getSingleResult();
         } catch (NoResultException e) {
             logger.error("Role not found by name {}", role, e);
         }
-        return id;
+        return null;
+    }
+
+    public List<User> getUsersByRole(RoleEnum role) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cr = cb.createQuery(User.class);
+        Root<User> root = cr.from(User.class);
+        Join<User, Role> joinedRole = root.join("role");
+        cr.select(root).where(cb.equal(joinedRole.get("name"), role));
+        return em.createQuery(cr).getResultList();
     }
 
     @Override

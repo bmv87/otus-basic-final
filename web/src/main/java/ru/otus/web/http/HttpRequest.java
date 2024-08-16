@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,15 +20,45 @@ public class HttpRequest {
     private Map<String, String> parameters;
     private Map<String, String> headers;
     private String body;
+    private byte[] bodyB;
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
     public HttpRequest(InputStream in) throws IOException {
-        byte[] buffer = new byte[8192];
-        int n = in.read(buffer);
-        if (n < 1) {
-            return;
+        byte[] buffer = new byte[81920000];
+        int availableLength = 0;
+        int currentStartIndex = 0;
+        int totalLength = 0;
+        while ((availableLength = in.available()) > 0) {
+
+            int n = in.read(buffer, currentStartIndex, availableLength);
+            if (n < 1) {
+                break;
+            }
+            currentStartIndex = currentStartIndex + n;
+            totalLength = totalLength + n;
         }
-        rawRequest = new String(buffer, 0, n);
+        StringBuilder sb = new StringBuilder();
+        char t1 = '\r';
+        char t2 = '\n';
+        var charCount = 0;
+
+        for (int i = 0; i < totalLength; i++) {
+            char c = (char) buffer[i];
+
+            if (c == t1 || c == t2) {
+                charCount = charCount + 1;
+            } else {
+                charCount = 0;
+            }
+            sb.append(c);
+            if (charCount == 4) {
+                bodyB = Arrays.copyOfRange(buffer, i + 1, totalLength);
+                break;
+            }
+        }
+        var bodyStr = bodyB != null ? new String(bodyB, StandardCharsets.UTF_8) : "";
+        rawRequest = sb.append(bodyStr).toString();
+        body = bodyStr;
         logger.debug("{}{}", System.lineSeparator(), rawRequest);
 
         this.parse();
@@ -60,6 +92,10 @@ public class HttpRequest {
         return body;
     }
 
+    public byte[] getBodyB() {
+        return bodyB;
+    }
+
     public String getProtocol() {
         return protocol;
     }
@@ -83,12 +119,14 @@ public class HttpRequest {
                 this.parameters.put(keyValue[0], value);
             }
         }
-        if (method == HttpMethod.POST || method == HttpMethod.PUT) {
-            this.body = rawRequest.substring(
-                    rawRequest.indexOf("\r\n\r\n") + 4
-            );
+//        if (method == HttpMethod.POST || method == HttpMethod.PUT) {
+//            this.body = rawRequest.substring(
+//                    rawRequest.indexOf("\r\n\r\n") + 4
+//            );
+//        }
+        if (method != HttpMethod.POST && method != HttpMethod.PUT) {
+            this.body = null;
         }
-
         int startHeadersIndex = rawRequest.indexOf('\n') + 1;
         int endHeadersIndex = rawRequest.indexOf("\r\n\r\n", startHeadersIndex);
 

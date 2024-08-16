@@ -4,16 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="">
+    <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="feat: HttpResponse refactoring">
+      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/FileInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/FilesService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/file/DownloadFileVM.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/file/FileItemVM.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/models/file/FileUploadingResponseVM.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/controllers/FilesController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/models/ByteArrayBody.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/models/FileContent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/routing/File.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/http/StatusCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/http/StatusCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/Seed.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/Seed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/UsersRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/DBRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repository/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/NotesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/NotesService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/UsersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/UsersService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/HttpServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/HttpServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/ExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/OptionsRequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/OptionsRequestHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/handlers/RouteHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/StatusCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/StatusCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/models/ResponseEntity.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +37,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="AnnotationType" />
         <option value="Enum" />
+        <option value="AnnotationType" />
         <option value="Class" />
       </list>
     </option>
@@ -76,6 +89,7 @@
       <recent name="ru.otus.services.models.user" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="ru.otus.services.models.file" />
       <recent name="ru.otus.services.models" />
       <recent name="ru.otus.web.http" />
       <recent name="ru.otus.repository.entities" />
@@ -217,7 +231,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723634495853</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="feat: HttpResponse refactoring">
+      <option name="closed" value="true" />
+      <created>1723648562454</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1723648562454</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -232,15 +254,16 @@
     <MESSAGE value="fix: route handlers (params, default values, exceptions)" />
     <MESSAGE value="feat: route handlers refactoring" />
     <MESSAGE value="feat: app argument -port" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: app argument -port" />
+    <MESSAGE value="feat: HttpResponse refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: HttpResponse refactoring" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/services/src/main/java/ru/otus/services/NotesService.java</url>
-          <line>166</line>
-          <option name="timeStamp" value="34" />
+          <url>file://$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpContext.java</url>
+          <line>22</line>
+          <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

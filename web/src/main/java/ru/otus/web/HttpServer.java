@@ -26,9 +26,12 @@ public class HttpServer implements AutoCloseable {
     public void start() {
         var dispatcher = new RouteDispatcher();
         try (ServerSocket serverSocket = new ServerSocket(port)) {
+            serverSocket.setReceiveBufferSize(1048576);
             logger.info("Сервер запущен на порту: {}", port);
             while (!serverSocket.isClosed() && !Thread.currentThread().isInterrupted()) {
                 Socket socket = serverSocket.accept();
+                socket.setReceiveBufferSize(1048576);
+                socket.setKeepAlive(true);
                 clientPool.submit(new RequestHandler(socket, dispatcher));
             }
         } catch (IOException e) {

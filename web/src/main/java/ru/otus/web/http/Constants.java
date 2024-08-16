@@ -4,6 +4,7 @@ public class Constants {
     public static final String ANY_VALUE = "*";
 
     public static class Headers {
+        public static final String CONTENT_DISPOSITION = "Content-Disposition";
         public static final String CONTENT_TYPE = "Content-Type";
         public static final String TOKEN = "Token";
         public static final String ACCEPT = "Accept";
@@ -23,5 +24,6 @@ public class Constants {
     public static class MimeTypes {
         public static final String TEXT = "text/html";
         public static final String JSON = "application/json";
+        public static final String FORM_DATA = "multipart/form-data";
     }
 }

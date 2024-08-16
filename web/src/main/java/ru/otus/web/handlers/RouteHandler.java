@@ -8,19 +8,19 @@ import ru.otus.services.exceptions.BadRequestException;
 import ru.otus.services.exceptions.ResponseException;
 import ru.otus.web.helpers.GsonConfigurator;
 import ru.otus.web.helpers.TypesHelper;
+import ru.otus.web.http.Constants;
 import ru.otus.web.http.HttpContext;
 import ru.otus.web.http.HttpResponse;
-import ru.otus.web.http.StatusCode;
-import ru.otus.web.routing.FromBody;
-import ru.otus.web.routing.ParamVariable;
-import ru.otus.web.routing.PathVariable;
-import ru.otus.web.routing.Route;
+import ru.otus.web.models.ByteArrayBody;
+import ru.otus.web.routing.*;
 import ru.otus.web.security.Principal;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +39,13 @@ public class RouteHandler implements HttpContextHandler {
     public void execute(HttpContext context) throws IOException {
         logger.debug("RouteHandler execute");
         logger.debug(route.toString());
+        var fileAnnotations = method.getAnnotation(File.class);
+        boolean isFileResponse = fileAnnotations != null;
+
+        if (isFileResponse && !ByteArrayBody.class.isAssignableFrom(method.getReturnType())) {
+            throw new ResponseException("Некорректный тип класса в параметрах метода.");
+        }
+
         try {
 
             List<Object> params = new ArrayList<>();
@@ -56,12 +63,15 @@ public class RouteHandler implements HttpContextHandler {
                 if (tryAddFromBody(params, p, context)) {
                     continue;
                 }
+                if (tryAddFileContent(params, p, context)) {
+                    continue;
+                }
             }
             var response = context.getResponse();
             if (params.isEmpty()) {
-                tryInvoke(method, response);
+                tryInvoke(method, response, isFileResponse);
             } else {
-                tryInvokeWithParams(method, params, response);
+                tryInvokeWithParams(method, params, response, isFileResponse);
             }
             response.send();
         } catch (InstantiationException | IllegalAccessException |
@@ -76,7 +86,7 @@ public class RouteHandler implements HttpContextHandler {
         }
     }
 
-    private void tryInvoke(Method method, HttpResponse response) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+    private void tryInvoke(Method method, HttpResponse response, boolean isFileResponse) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
 
         var inst = method.getDeclaringClass().getConstructor().newInstance();
         try {
@@ -84,21 +94,42 @@ public class RouteHandler implements HttpContextHandler {
                 method.invoke(inst);
                 response.noContent();
             } else {
-                response.ok(method.invoke(inst));
+                if (isFileResponse) {
+                    var body = method.invoke(inst);
+                    if (body instanceof ByteArrayBody bar) {
+                        response.file(bar);
+                    } else {
+                        throw new ResponseException(String.format("Некорректный тип возвращаемого значения для метода %s класса %s", method.getName(), method.getReturnType().getSimpleName()));
+                    }
+                } else {
+                    response.ok(method.invoke(inst));
+                }
             }
         } finally {
             tryClose(inst);
         }
     }
 
-    private void tryInvokeWithParams(Method method, List<Object> params, HttpResponse response) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+    private void tryInvokeWithParams(Method method, List<Object> params, HttpResponse response, boolean isFileResponse) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         var inst = method.getDeclaringClass().getConstructor().newInstance();
         try {
             if (method.getReturnType().equals(Void.TYPE)) {
-                response.noContent();
                 method.invoke(inst, params.toArray());
+                response.noContent();
+
             } else {
-                response.ok(method.invoke(inst, params.toArray()));
+
+                if (isFileResponse) {
+                    var body = method.invoke(inst, params.toArray());
+                    if (body instanceof ByteArrayBody bar) {
+                        response.file(bar);
+                    } else {
+                        throw new ResponseException(String.format("Некорректный тип возвращаемого значения для метода %s класса %s", method.getName(), method.getReturnType().getSimpleName()));
+                    }
+                } else {
+                    response.ok(method.invoke(inst, params.toArray()));
+                }
+
             }
         } finally {
             tryClose(inst);
@@ -169,6 +200,51 @@ public class RouteHandler implements HttpContextHandler {
         } catch (JsonParseException e) {
             throw new BadRequestException("Некорректный формат входящего JSON объекта");
         }
+        return true;
+    }
+
+
+    private boolean tryAddFileContent(List<Object> distinationList, Parameter p, HttpContext context) {
+        var fileAnnotation = p.getAnnotation(File.class);
+        if (fileAnnotation == null) {
+            return false;
+        }
+        if (!ByteArrayBody.class.isAssignableFrom(p.getType())) {
+            throw new ResponseException("Некорректный тип класса в параметрах метода.");
+        }
+
+        ByteArrayBody file = null;
+        try {
+            file = (ByteArrayBody) p.getType().getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
+            throw new ResponseException("Ошибка получения экземпляра класса для хранения содержимого файла.", e);
+        }
+        var request = context.getRequest();
+        var contentTypeHeaderVal = request.getHeaders().get(Constants.Headers.CONTENT_TYPE.toLowerCase());
+        var contentDispositionHeaderVal = request.getHeaders().get(Constants.Headers.CONTENT_DISPOSITION.toLowerCase());
+        if (contentTypeHeaderVal == null ||
+                contentTypeHeaderVal.isBlank()) {
+            throw new BadRequestException("Для данного маршрута не указан заголовок. " + Constants.Headers.CONTENT_TYPE);
+        }
+        if (contentDispositionHeaderVal == null ||
+                contentDispositionHeaderVal.isBlank()) {
+            throw new BadRequestException("Для данного маршрута не указан заголовок. " + Constants.Headers.CONTENT_DISPOSITION);
+        }
+        var fileName = contentDispositionHeaderVal.substring(contentDispositionHeaderVal.indexOf("=") + 1);
+        try {
+            fileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new BadRequestException("Ошибка парсинга имени файла. " + fileName);
+        }
+
+        file.setContentType(contentTypeHeaderVal);
+        file.setFileName(fileName);
+        file.setContent(request.getBodyB());
+        file.setSize(request.getBodyB().length);
+
+        distinationList.add(file);
+
         return true;
     }
 }
