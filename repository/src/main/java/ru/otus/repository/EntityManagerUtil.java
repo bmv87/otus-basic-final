@@ -8,7 +8,7 @@ public class EntityManagerUtil {
 
     private static EntityManagerFactory factory;
 
-    public static EntityManagerFactory getEntityManagerFactory() {
+    public synchronized static EntityManagerFactory getEntityManagerFactory() {
         if (factory == null) {
             synchronized (EntityManagerFactory.class) {
                 if (factory == null) {

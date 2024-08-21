@@ -1,6 +1,6 @@
 package ru.otus.services;
 
-import ru.otus.repository.DBRepository;
+import ru.otus.repository.DBContext;
 import ru.otus.repository.entities.GenderEnum;
 import ru.otus.repository.entities.RoleEnum;
 import ru.otus.repository.entities.Subscription;
@@ -21,11 +21,11 @@ import java.util.List;
 import java.util.UUID;
 
 public class UsersService implements AutoCloseable {
-    private final DBRepository repository;
+    private final DBContext dbContext;
     private final CacheManager cacheManager;
 
     public UsersService() {
-        repository = new DBRepository();
+        dbContext = new DBContext();
         cacheManager = CacheManager.getInstance();
     }
 
@@ -41,7 +41,7 @@ public class UsersService implements AutoCloseable {
     }
 
     public LoginResponseVM login(LoginRequestVM model) {
-        var user = repository.getUserByLogin(model.getLogin());
+        var user = dbContext.getUserByLogin(model.getLogin());
         if (user == null || !user.getPassword().equals(model.getPassword())) {
             throw new UnauthorizedException("Неправильный логин или пароль.");
         }
@@ -60,13 +60,13 @@ public class UsersService implements AutoCloseable {
         if (model == null || model.getUsername() == null || model.getUsername().isBlank()) {
             throw new UnprocessableEntityException("Имя пользователя не задано");
         }
-        repository.beginTransaction();
-        var user = repository.getUserById(currentUser.getUserId());
+        dbContext.beginTransaction();
+        var user = dbContext.getUserById(currentUser.getUserId());
         user.setAge(model.getAge());
         user.setGender(model.getGender());
         user.setUsername(model.getUsername());
-        repository.update(user);
-        repository.saveContext();
+        dbContext.update(user);
+        dbContext.saveContext();
     }
 
     public UUID registration(UserCreateVM model) {
@@ -79,10 +79,10 @@ public class UsersService implements AutoCloseable {
             throw new UnprocessableEntityException("Указанный логин уже занят");
         }
 
-        var roleId = repository.getRoleId(RoleEnum.USER);
+        var roleId = dbContext.getRoleId(RoleEnum.USER);
         var newUser = new User(UUID.randomUUID(), roleId, model.getLogin(), model.getUsername(), model.getPassword());
-        repository.save(newUser);
-        repository.saveContext();
+        dbContext.save(newUser);
+        dbContext.saveContext();
         return newUser.getUserId();
     }
 
@@ -104,8 +104,8 @@ public class UsersService implements AutoCloseable {
                 throw new UnprocessableEntityException("Недопустимое значение поля gender " + gender);
             }
         }
-        var subscriptions = repository.getUserSubscriptions(currentUser.getUserId());
-        var users = repository.getUsers(
+        var subscriptions = dbContext.getUserSubscriptions(currentUser.getUserId());
+        var users = dbContext.getUsers(
                 currentUser.getRole() != RoleEnum.ADMIN,
                 currentUser.getUserId(),
                 username,
@@ -132,13 +132,12 @@ public class UsersService implements AutoCloseable {
             throw new ForbiddenException("Доступ запрещен.");
         }
         if (!currentUser.getUserId().equals(userId)) {
-            var subscriptions = repository.getUserSubscriptions(currentUser.getUserId());
-            if (subscriptions.stream()
-                    .noneMatch(s -> s.getSubscriberId().equals(currentUser.getUserId()) && s.getBlogOwnerId().equals(userId))) {
+            var subscription = dbContext.getSubscriptionById(currentUser.getUserId(), userId);
+            if (subscription == null) {
                 throw new ForbiddenException("Вы не подписаны на этого пользователя");
             }
         }
-        var user = repository.getUserById(userId);
+        var user = dbContext.getUserById(userId);
         return mapUserToVM(user);
     }
 
@@ -153,7 +152,7 @@ public class UsersService implements AutoCloseable {
             throw new ForbiddenException("Вы не можете заблокировать свой личный кабинет.");
         }
 
-        var user = repository.getUserById(userId);
+        var user = dbContext.getUserById(userId);
         if (user == null) {
             throw new NotFoundException("Пользователь не найден");
         }
@@ -165,8 +164,8 @@ public class UsersService implements AutoCloseable {
             }
         }
         user.setLocked(model.isLocked());
-        repository.update(user);
-        repository.saveContext();
+        dbContext.update(user);
+        dbContext.saveContext();
     }
 
     public void addSubscription(UserVM currentUser, SubscriptionVM model) {
@@ -176,18 +175,18 @@ public class UsersService implements AutoCloseable {
         if (model.getUserId() == null) {
             throw new UnprocessableEntityException("Идентификатор пользователя не указан.");
         }
-        repository.beginTransaction();
-        var user = repository.getUserById(model.getUserId());
+        dbContext.beginTransaction();
+        var user = dbContext.getUserById(model.getUserId());
         if (user == null) {
             throw new NotFoundException("Пользователь не найден");
         }
-        var subscription = repository.getSubscriptionById(currentUser.getUserId(), model.getUserId());
+        var subscription = dbContext.getSubscriptionById(currentUser.getUserId(), model.getUserId());
         if (subscription != null) {
             throw new UnprocessableEntityException(String.format("Вы уже подписаны на пользователя %s.", user.getUsername()));
         }
         subscription = new Subscription(currentUser.getUserId(), model.getUserId(), LocalDateTime.now());
-        repository.save(subscription);
-        repository.saveContext();
+        dbContext.save(subscription);
+        dbContext.saveContext();
     }
 
     public void deleteSubscription(UserVM currentUser, UUID blogOwnerId) {
@@ -198,17 +197,17 @@ public class UsersService implements AutoCloseable {
             throw new UnprocessableEntityException("Идентификатор пользователя не указан.");
         }
 
-        var user = repository.getUserById(blogOwnerId);
+        var user = dbContext.getUserById(blogOwnerId);
         if (user == null) {
             throw new NotFoundException("Пользователь не найден");
         }
-        var subscription = repository.getSubscriptionById(currentUser.getUserId(), blogOwnerId);
+        var subscription = dbContext.getSubscriptionById(currentUser.getUserId(), blogOwnerId);
         if (subscription == null) {
             throw new NotFoundException(String.format("Вы не подписаны на пользователя %s.", user.getUsername()));
         }
         subscription = new Subscription(currentUser.getUserId(), blogOwnerId, LocalDateTime.now());
-        repository.delete(subscription);
-        repository.saveContext();
+        dbContext.delete(subscription);
+        dbContext.saveContext();
     }
 
     public List<SubscriptionInfoVM> getSubscriptions(UserVM currentUser, UUID subscriberId) {
@@ -219,38 +218,31 @@ public class UsersService implements AutoCloseable {
             throw new UnprocessableEntityException("Идентификатор пользователя не указан.");
         }
 
-        var user = repository.getUserById(subscriberId);
+        var user = dbContext.getUserById(subscriberId);
         if (user == null) {
             throw new NotFoundException("Пользователь не найден");
         }
         if (!currentUser.getUserId().equals(subscriberId)) {
-            var subscriptions = repository.getUserSubscriptions(currentUser.getUserId());
+            var subscriptions = dbContext.getUserSubscriptions(currentUser.getUserId());
             if (subscriptions.stream()
                     .noneMatch(s -> s.getSubscriberId().equals(currentUser.getUserId()) && s.getBlogOwnerId().equals(subscriberId))) {
                 throw new ForbiddenException("Вы не подписаны на этого пользователя");
             }
         }
-        var subscriptions = repository.getUserSubscriptions(subscriberId);
+        var subscriptions = dbContext.getUserSubscriptions(subscriberId);
         return subscriptions.stream()
                 .map(s -> new SubscriptionInfoVM(s.getBlogOwnerId(), s.getBlogOwner().getUsername()))
                 .toList();
     }
 
     private boolean isLoginAlreadyExist(String login) {
-        var user = repository.getUserByLogin(login);
+        var user = dbContext.getUserByLogin(login);
         return user != null;
-    }
-
-    public boolean isAdmin(String login) {
-        if (login == null || login.isBlank()) {
-            return false;
-        }
-        return repository.isInRole(login, RoleEnum.ADMIN);
     }
 
     @Override
     public void close() throws Exception {
-        repository.close();
+        dbContext.close();
     }
 
 }

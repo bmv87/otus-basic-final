@@ -1,6 +1,6 @@
 package ru.otus.services;
 
-import ru.otus.repository.DBRepository;
+import ru.otus.repository.DBContext;
 import ru.otus.repository.entities.Grade;
 import ru.otus.repository.entities.Note;
 import ru.otus.repository.entities.RoleEnum;
@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class NotesService implements AutoCloseable {
-    private final DBRepository repository;
+    private final DBContext dbContext;
 
     public NotesService() {
-        repository = new DBRepository();
+        dbContext = new DBContext();
     }
 
     public List<NoteInfoVM> getUserNotes(UserVM currentUser, UUID userId) {
@@ -33,18 +33,18 @@ public class NotesService implements AutoCloseable {
             throw new UnprocessableEntityException("Идентификатор пользователя не указан.");
         }
 
-        var user = repository.getUserById(userId);
+        var user = dbContext.getUserById(userId);
         if (user == null) {
             throw new NotFoundException("Пользователь не найден");
         }
         if (!currentUser.getUserId().equals(userId)) {
-            var subscriptions = repository.getUserSubscriptions(currentUser.getUserId());
+            var subscriptions = dbContext.getUserSubscriptions(currentUser.getUserId());
             if (subscriptions.stream()
                     .noneMatch(s -> s.getSubscriberId().equals(currentUser.getUserId()) && s.getBlogOwnerId().equals(userId))) {
                 throw new ForbiddenException("Вы не подписаны на этого пользователя");
             }
         }
-        var notes = repository.getNotesByUserId(userId);
+        var notes = dbContext.getNotesByUserId(userId);
 
         return notes.stream().map(this::mapToVM).toList();
     }
@@ -61,8 +61,8 @@ public class NotesService implements AutoCloseable {
         newNote.setContent(model.getContent());
         newNote.setCreated(LocalDateTime.now());
         newNote.setUserId(currentUser.getUserId());
-        repository.save(newNote);
-        repository.saveContext();
+        dbContext.save(newNote);
+        dbContext.saveContext();
         return newNote.getNoteId();
     }
 
@@ -76,8 +76,8 @@ public class NotesService implements AutoCloseable {
         if (noteId == null) {
             throw new UnprocessableEntityException("Идентификатор заметки не указан.");
         }
-        repository.beginTransaction();
-        var note = repository.getNoteById(noteId);
+        dbContext.beginTransaction();
+        var note = dbContext.getNoteById(noteId);
         if (note == null) {
             throw new UnprocessableEntityException("Заметка не найдена.");
         }
@@ -87,8 +87,8 @@ public class NotesService implements AutoCloseable {
         newNote.setContent(model.getContent());
         newNote.setCreated(LocalDateTime.now());
         newNote.setUserId(currentUser.getUserId());
-        repository.save(newNote);
-        repository.saveContext();
+        dbContext.save(newNote);
+        dbContext.saveContext();
         return newNote.getNoteId();
     }
 
@@ -102,8 +102,8 @@ public class NotesService implements AutoCloseable {
         if (noteId == null) {
             throw new UnprocessableEntityException("Идентификатор заметки не указан.");
         }
-        repository.beginTransaction();
-        var note = repository.getNoteById(noteId);
+        dbContext.beginTransaction();
+        var note = dbContext.getNoteById(noteId);
         if (note == null) {
             throw new UnprocessableEntityException("Заметка не найдена.");
         }
@@ -112,8 +112,8 @@ public class NotesService implements AutoCloseable {
         }
 
         note.setContent(model.getContent());
-        repository.update(note);
-        repository.saveContext();
+        dbContext.update(note);
+        dbContext.saveContext();
     }
 
     public void addGrade(UserVM currentUser, UUID noteId, GradeCreateVM model) {
@@ -126,28 +126,28 @@ public class NotesService implements AutoCloseable {
         if (noteId == null) {
             throw new UnprocessableEntityException("Идентификатор заметки не указан.");
         }
-        repository.beginTransaction();
-        var note = repository.getNoteById(noteId);
+        dbContext.beginTransaction();
+        var note = dbContext.getNoteById(noteId);
         if (note == null) {
             throw new UnprocessableEntityException("Заметка не найдена.");
         }
         if (note.getUserId().equals(currentUser.getUserId())) {
             throw new ForbiddenException("Оценка собственных заметок запрещена.");
         }
-        var grade = repository.getGrade(noteId, currentUser.getUserId());
+        var grade = dbContext.getGrade(noteId, currentUser.getUserId());
         if (grade == null) {
             grade = new Grade();
             grade.setGradeId(UUID.randomUUID());
             grade.setNoteId(noteId);
             grade.setGradeType(model.getGradeType());
             grade.setUserId(currentUser.getUserId());
-            repository.save(grade);
+            dbContext.save(grade);
         } else {
             grade.setGradeType(model.getGradeType());
-            repository.update(grade);
+            dbContext.update(grade);
         }
 
-        repository.saveContext();
+        dbContext.saveContext();
     }
 
     public void deleteNote(UserVM currentUser, UUID noteId) {
@@ -158,8 +158,8 @@ public class NotesService implements AutoCloseable {
         if (noteId == null) {
             throw new UnprocessableEntityException("Идентификатор заметки не указан.");
         }
-        repository.beginTransaction();
-        var note = repository.getNoteById(noteId);
+        dbContext.beginTransaction();
+        var note = dbContext.getNoteById(noteId);
         if (note == null) {
             throw new UnprocessableEntityException("Заметка не найдена.");
         }
@@ -167,8 +167,8 @@ public class NotesService implements AutoCloseable {
                 currentUser.getRole() != RoleEnum.ADMIN) {
             throw new ForbiddenException("Доступ запрещен.");
         }
-        repository.delete(note);
-        repository.saveContext();
+        dbContext.delete(note);
+        dbContext.saveContext();
     }
 
     private NoteInfoVM mapToVM(Note note) {
@@ -194,6 +194,6 @@ public class NotesService implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        repository.close();
+        dbContext.close();
     }
 }

@@ -1,11 +1,17 @@
 package ru.otus.repository.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
+
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "roles")
+@Data
+@NoArgsConstructor
+@FieldNameConstants
 public class Role {
 
     @Id
@@ -23,45 +29,5 @@ public class Role {
         this.roleId = roleId;
         this.name = name;
         this.description = description;
-    }
-
-    public Role() {
-    }
-
-    public UUID getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(UUID roleId) {
-        this.roleId = roleId;
-    }
-
-    public RoleEnum getName() {
-        return name;
-    }
-
-    public void setName(RoleEnum name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Role role = (Role) o;
-        return Objects.equals(roleId, role.roleId) && name == role.name && Objects.equals(description, role.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(roleId, name, description);
     }
 }
