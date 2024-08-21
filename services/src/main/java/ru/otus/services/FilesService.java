@@ -1,5 +1,7 @@
 package ru.otus.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.repository.DBContext;
 import ru.otus.repository.entities.FileInfo;
 import ru.otus.services.exceptions.ForbiddenException;
@@ -12,18 +14,17 @@ import ru.otus.services.models.file.FileUploadingResponseVM;
 import ru.otus.services.models.user.UserVM;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.UUID;
 
 public class FilesService implements AutoCloseable {
     private final DBContext dbContext;
     private final String FILES_STORE_DIRECTORY = ApplicationPropertiesHelper.tryGet(ApplicationPropertiesHelper.FILES_STORE_DIRECTORY_PARAM_NANE, String.class);
+    private static final Logger logger = LoggerFactory.getLogger(FilesService.class);
 
     public FilesService() {
         dbContext = new DBContext();
@@ -50,16 +51,18 @@ public class FilesService implements AutoCloseable {
             if (Files.exists(uploadFilePath)) {
                 throw new IOException("File already exists: " + uploadFilePath);
             }
-            try (RandomAccessFile stream = new RandomAccessFile(uploadFilePath.toString(), "rw");
-                 FileChannel channel = stream.getChannel();) {
+            logger.debug("File content length for saving {}: ", content.length);
+// TODO: ??? big file saving bag
+//            try (RandomAccessFile stream = new RandomAccessFile(uploadFilePath.toString(), "rw");
+//                 FileChannel channel = stream.getChannel();) {
+//
+//                ByteBuffer buffer = ByteBuffer.allocate(content.length);
+//                buffer.put(content);
+//                buffer.flip();
+//                channel.write(buffer);
+//            }
 
-                ByteBuffer buffer = ByteBuffer.allocate(content.length);
-                buffer.put(content);
-                buffer.flip();
-                channel.write(buffer);
-            }
-
-// Files.write(uploadFilePath, content);
+            Files.write(uploadFilePath, content, StandardOpenOption.CREATE);
             newFile.setSourcePath(uploadFilePath.toString());
             try {
                 dbContext.save(newFile);

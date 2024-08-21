@@ -45,7 +45,7 @@ public class HttpContext implements AutoCloseable {
         try {
             request = null;
             response = null;
-            if (!connection.isClosed() && connection.isConnected()) {
+            if (connection != null && !connection.isClosed() && connection.isConnected()) {
                 connection.close();
             }
             connection = null;

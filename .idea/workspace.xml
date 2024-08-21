@@ -4,32 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/DBContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/Repository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/specifications/FileSpecifications.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/specifications/GradeSpecifications.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/specifications/NoteSpecifications.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/specifications/RoleSpecifications.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/specifications/Specification.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/specifications/SubscriptionSpecifications.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/specifications/UserSpecifications.java" afterDir="false" />
+    <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="feat: repository module refactoring (all repos in DBContext) + lombok added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/repository/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/DBRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/EntityManagerUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/EntityManagerUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/Seed.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/Seed.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/FileInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/FileInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Grade.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Grade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Note.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Note.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Subscription.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/Subscription.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/SubscriptionId.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/SubscriptionId.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/repository/src/main/java/ru/otus/repository/entities/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/FilesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/FilesService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/NotesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/NotesService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/UsersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/UsersService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -298,7 +277,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723827194223</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="feat: repository module refactoring (all repos in DBContext) + lombok added">
+      <option name="closed" value="true" />
+      <created>1724245833616</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1724245833616</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -319,7 +306,8 @@
     <MESSAGE value="feat: HttpRequest refactoring" />
     <MESSAGE value="feat: application.properties loader" />
     <MESSAGE value="feat: RouteParamsCollector added &amp; RouteHandler refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: RouteParamsCollector added &amp; RouteHandler refactoring" />
+    <MESSAGE value="feat: repository module refactoring (all repos in DBContext) + lombok added" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: repository module refactoring (all repos in DBContext) + lombok added" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

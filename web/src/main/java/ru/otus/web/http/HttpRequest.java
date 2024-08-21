@@ -6,25 +6,42 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequest {
-    private String rawRequest;
+    private static final int DEFAULT_BUFFER_SIZE = 8192;
+    private final String rawRequest;
     private String protocol;
 
     private String uri;
     private String path;
     private HttpMethod method;
-    private Map<String, String> parameters;
-    private Map<String, String> headers;
+    private final Map<String, String> parameters = new HashMap<>();
+    private final Map<String, String> headers = new HashMap<>();
     private String body;
     private byte[] bodyB;
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
     public HttpRequest(InputStream in) throws IOException {
-        byte[] buffer = new byte[81920000];
+        rawRequest = readRequestInfo(in);
+        this.parse(rawRequest.split("\r\n"));
+        readRequestBody(in);
+        logger.debug("{}{}", System.lineSeparator(), rawRequest);
+    }
+
+    private void readRequestBody(InputStream in) throws IOException {
+
+        if (method != HttpMethod.POST && method != HttpMethod.PUT) {
+            return;
+        }
+        var contentLen = DEFAULT_BUFFER_SIZE;
+
+        if (headers.containsKey(Constants.Headers.CONTENT_LENGTH.toLowerCase())) {
+            contentLen = Integer.parseInt(headers.get(Constants.Headers.CONTENT_LENGTH.toLowerCase()));
+        }
+
+        byte[] buffer = new byte[contentLen];
         int availableLength = 0;
         int currentStartIndex = 0;
         int totalLength = 0;
@@ -37,13 +54,21 @@ public class HttpRequest {
             currentStartIndex = currentStartIndex + n;
             totalLength = totalLength + n;
         }
+        if (headers.containsKey(Constants.Headers.CONTENT_DISPOSITION.toLowerCase())) {
+            bodyB = buffer;
+        } else {
+            this.body = new String(buffer, StandardCharsets.UTF_8);
+        }
+    }
+
+    private String readRequestInfo(InputStream in) throws IOException {
         StringBuilder sb = new StringBuilder();
         char t1 = '\r';
         char t2 = '\n';
+        int b;
         var charCount = 0;
-
-        for (int i = 0; i < totalLength; i++) {
-            char c = (char) buffer[i];
+        while ((b = in.read()) != -1) {
+            char c = (char) b;
 
             if (c == t1 || c == t2) {
                 charCount = charCount + 1;
@@ -52,14 +77,11 @@ public class HttpRequest {
             }
             sb.append(c);
             if (charCount == 4) {
-                bodyB = Arrays.copyOfRange(buffer, i + 1, totalLength);
                 break;
             }
         }
-        rawRequest = sb.toString();
-        logger.debug("{}{}", System.lineSeparator(), rawRequest);
 
-        this.parse();
+        return sb.toString();
     }
 
     public String getPath() {
@@ -98,15 +120,7 @@ public class HttpRequest {
         return protocol;
     }
 
-    private void parse() {
-        int startIndex = rawRequest.indexOf(' ');
-        int endIndex = rawRequest.indexOf(' ', startIndex + 1);
-        this.uri = rawRequest.substring(startIndex + 1, endIndex);
-        this.protocol = rawRequest.substring(endIndex + 1, rawRequest.indexOf('\r'));
-        this.path = parsePathString(this.uri);
-        this.method = HttpMethod.valueOf(rawRequest.substring(0, startIndex));
-        this.parameters = new HashMap<>();
-        this.headers = new HashMap<>();
+    private void parseUriParameters(String url) {
         if (uri.contains("?")) {
             String[] elements = uri.split("[?]");
             this.uri = elements[0];
@@ -117,20 +131,27 @@ public class HttpRequest {
                 this.parameters.put(keyValue[0], value);
             }
         }
+    }
 
-        int startHeadersIndex = rawRequest.indexOf('\n') + 1;
-        int endHeadersIndex = rawRequest.indexOf("\r\n\r\n", startHeadersIndex);
-
-        var rawHeaders = rawRequest.substring(startHeadersIndex, endHeadersIndex).split("\r\n");
-        for (String header : rawHeaders) {
+    private void parseHeaders(String[] lines) {
+        for (int i = 1; i < lines.length; i++) {
+            var header = lines[i];
             var keyValue = header.split(": ", 2);
             var value = keyValue.length > 1 ? keyValue[1] : "";
             headers.put(keyValue[0].toLowerCase(), value);
         }
-        if ((method == HttpMethod.POST || method == HttpMethod.PUT) &&
-                !headers.containsKey(Constants.Headers.CONTENT_DISPOSITION)) {
-            this.body = bodyB != null ? new String(bodyB, StandardCharsets.UTF_8) : "";
-        }
+
+    }
+
+    private void parse(String[] lines) {
+        var firstLineParams = lines[0].split(" ");
+        this.method = HttpMethod.valueOf(firstLineParams[0]);
+        this.uri = firstLineParams[1];
+        this.protocol = firstLineParams[2];
+        this.path = parsePathString(this.uri);
+        parseUriParameters(uri);
+        parseHeaders(lines);
+
         logInfo();
     }
 
