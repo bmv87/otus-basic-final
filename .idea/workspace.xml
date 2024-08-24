@@ -4,38 +4,126 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    <list default="true" id="8fe0b426-21e3-42cb-919e-e47d3bb3696f" name="Changes" comment="feat: repository module refactoring (all repos in DBContext) + lombok added">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/FilesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/services/src/main/java/ru/otus/services/FilesService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/ru/otus/web/http/HttpRequest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="AnnotationType" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2kBkxjhQKxvE8gc6Gs9U6wwhsly" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.Seed.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;final&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Projects/java/otus-basic-final/otus-basic-final/services/src/main/java/ru/otus/services/models&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Projects/java/otus-basic-final/otus-basic-final/repository/src/main/java/ru/otus/repository&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="ru.otus.repository.entities" />
+      <recent name="ru.otus.web.models" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Projects\java\otus-basic-final\otus-basic-final\repository\src\main\java\ru\otus\repository" />
+      <recent name="C:\Projects\java\otus-basic-final\otus-basic-final\repository\src\main\resources" />
+      <recent name="C:\Projects\java\otus-basic-final\otus-basic-final\web\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Projects\java\otus-basic-final\otus-basic-final\web\src\main\java\ru\otus\web\controllers" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="ru.otus.services.models.subscription" />
+      <recent name="ru.otus.services.models.grade" />
+      <recent name="ru.otus.services.models.note" />
+      <recent name="ru.otus.services.models.user" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="ru.otus.repository.specifications" />
+      <recent name="ru.otus.repository" />
+      <recent name="ru.otus.services.models.file" />
+      <recent name="ru.otus.services.models" />
+      <recent name="ru.otus.web.http" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ru.otus.web.Main" />
+      <module name="web" />
+      <option name="PROGRAM_PARAMETERS" value="-port:8189" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.otus.web.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Seed" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ru.otus.repository.Seed" />
+      <module name="repository" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.otus.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.Seed" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Seed" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -45,6 +133,191 @@
       <option name="presentableId" value="Default" />
       <updated>1722764605314</updated>
     </task>
+    <task id="LOCAL-00001" summary="feat: init">
+      <option name="closed" value="true" />
+      <created>1722766273882</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1722766273882</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat: repository &amp; services modules">
+      <option name="closed" value="true" />
+      <created>1723206456970</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1723206456970</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat: web module refactoring + controllers methods">
+      <option name="closed" value="true" />
+      <created>1723206524607</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1723206524607</updated>
+    </task>
+    <task id="LOCAL-00004" summary="fix:route handlers">
+      <option name="closed" value="true" />
+      <created>1723411070215</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1723411070215</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat: login edited">
+      <option name="closed" value="true" />
+      <created>1723411105920</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1723411105920</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fix: EntityManagerUtil &amp; UsersRepository">
+      <option name="closed" value="true" />
+      <created>1723561476915</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1723561476915</updated>
+    </task>
+    <task id="LOCAL-00007" summary="feat: edit user profile &amp; users filters logic">
+      <option name="closed" value="true" />
+      <created>1723561579487</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1723561579487</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fix: validations &amp; transactions">
+      <option name="closed" value="true" />
+      <created>1723561662468</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1723561662468</updated>
+    </task>
+    <task id="LOCAL-00009" summary="fix: route handlers (params, default values, exceptions)">
+      <option name="closed" value="true" />
+      <created>1723562084657</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1723562084657</updated>
+    </task>
+    <task id="LOCAL-00010" summary="feat: route handlers refactoring">
+      <option name="closed" value="true" />
+      <created>1723634464565</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1723634464566</updated>
+    </task>
+    <task id="LOCAL-00011" summary="feat: app argument -port">
+      <option name="closed" value="true" />
+      <created>1723634495853</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1723634495853</updated>
+    </task>
+    <task id="LOCAL-00012" summary="feat: HttpResponse refactoring">
+      <option name="closed" value="true" />
+      <created>1723648562454</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1723648562454</updated>
+    </task>
+    <task id="LOCAL-00013" summary="feat: files logic added + repository renaming">
+      <option name="closed" value="true" />
+      <created>1723813110424</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1723813110424</updated>
+    </task>
+    <task id="LOCAL-00014" summary="feat: TypesHelper edited">
+      <option name="closed" value="true" />
+      <created>1723823246528</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1723823246528</updated>
+    </task>
+    <task id="LOCAL-00015" summary="feat: HttpResponse refactoring">
+      <option name="closed" value="true" />
+      <created>1723823293044</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1723823293044</updated>
+    </task>
+    <task id="LOCAL-00016" summary="feat: HttpRequest refactoring">
+      <option name="closed" value="true" />
+      <created>1723823318483</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1723823318483</updated>
+    </task>
+    <task id="LOCAL-00017" summary="feat: application.properties loader">
+      <option name="closed" value="true" />
+      <created>1723823487071</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1723823487071</updated>
+    </task>
+    <task id="LOCAL-00018" summary="feat: RouteParamsCollector added &amp; RouteHandler refactoring">
+      <option name="closed" value="true" />
+      <created>1723827194223</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1723827194223</updated>
+    </task>
+    <task id="LOCAL-00019" summary="feat: repository module refactoring (all repos in DBContext) + lombok added">
+      <option name="closed" value="true" />
+      <created>1724245833616</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1724245833616</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: repository &amp; services modules" />
+    <MESSAGE value="feat: init" />
+    <MESSAGE value="feat: web module refactoring + controllers methods" />
+    <MESSAGE value="fix:route handlers" />
+    <MESSAGE value="feat: login edited" />
+    <MESSAGE value="fix: EntityManagerUtil &amp; UsersRepository" />
+    <MESSAGE value="feat: edit user profile &amp; users filters logic" />
+    <MESSAGE value="fix: validations &amp; transactions" />
+    <MESSAGE value="fix: route handlers (params, default values, exceptions)" />
+    <MESSAGE value="feat: route handlers refactoring" />
+    <MESSAGE value="feat: app argument -port" />
+    <MESSAGE value="feat: files logic added + repository renaming" />
+    <MESSAGE value="feat: TypesHelper edited" />
+    <MESSAGE value="feat: HttpResponse refactoring" />
+    <MESSAGE value="feat: HttpRequest refactoring" />
+    <MESSAGE value="feat: application.properties loader" />
+    <MESSAGE value="feat: RouteParamsCollector added &amp; RouteHandler refactoring" />
+    <MESSAGE value="feat: repository module refactoring (all repos in DBContext) + lombok added" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: repository module refactoring (all repos in DBContext) + lombok added" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="(method.getGenericReturnType() " />
+        <watch expression="method.getReturnType()" />
+        <watch expression="routes.keySet().stream().sorted()" />
+        <watch expression="routes.keySet().stream().sorted().toList()" language="JAVA" />
+        <watch expression="dataPredicates.getExpressions()" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
